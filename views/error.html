@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title  %}  {{title}} {% endblock %}
+
+{% block head %}
+{{title}}
+
+{% endblock %}
+	
+{% block content %}
+<p>This is just an error page.</p>
+<p>{{message}}</p>
+<p>{{error.status}}</p>
+<p>{{error.stack}}</p>
+{% endblock %}
