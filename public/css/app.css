@@ -381,15 +381,45 @@ label {
 	margin-left: 40px;
 }
 
+#start {
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background: url(/img/start.svg) center no-repeat;
+	background-size: 28px;
+	top: 158px;
+	left: 34%;
+	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
+#pause {
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background: url(/img/pause.svg) center no-repeat;
+	background-size: 28px;
+	top: 248px;
+	left: 34%;
+	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
 #goToTop:hover {
 	background: url(/img/goToTop_hover.svg) center no-repeat;
 	background-size: 28px;
 	border: 1px solid #000;
 }
 
-#goToTop:hover > #titleGoToTop {
+/* #goToTop:hover > #titleGoToTop {
 	display: block;
-}
+} */
 
 #titleGoToTop {
 	position: absolute;
@@ -397,7 +427,25 @@ label {
 	text-align: center;
 	width: 68px;
 	left: -11px;
-	display: none;
+	display: block;
+}
+
+#titleStart {
+	position: absolute;
+	top: 52px;
+	text-align: center;
+	width: 68px;
+	left: -11px;
+	display: block;
+}
+
+#titlePause {
+	position: absolute;
+	top: 52px;
+	text-align: center;
+	width: 68px;
+	left: -11px;
+	display: block;
 }
 
 .numberFormat {
