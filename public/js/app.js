@@ -16,28 +16,33 @@ function initSocket(){
 }
 
 function start(){
-    readNewTx();
-    readUpdateTx();
+    read_new_Tx();
+    read_update_Tx();
     console.log(tx_list);
 }
 
 function pause(){
-    socket.on('disconnect',function(){});
+    console.log('in pause');
+    socket.on('disconnect',function(reasion){
+        console.log('##############');
+        console.log(reasion);
+        console.log('##############');
+    });
 }
 
-function readNewTx(){
+function read_new_Tx(){
     socket.on('newTX',function(newTX){
         tx_list.push(newTX);
     })
 }
 
-function readUpdateTx(){
+function read_update_Tx(){
     socket.on('update', function(update) {
-        updateTXStatus(update, 'txConfirmed');
+        update_Tx(update, 'txConfirmed');
     });
 }
 
-function updateTXStatus(update, updateType){
+function update_Tx(update, updateType){
     console.log("in update");
     var txHash = update.hash;
     var milestoneType = update.milestone;
@@ -68,4 +73,8 @@ function consoleTx(){
             console.log("@@@@@@@@@@@",tx_list[i])
         }
     }
+}
+
+function init_new_point(){
+
 }
