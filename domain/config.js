@@ -8,10 +8,10 @@ var config = {
             },
     
     "MongoDB":{
-        "DB_CONN_STR":"mongodb://tech-tst-mongo.zhonganinfo.com:27017/tech_fudan_publicchain",
-        "user":"tech_fudan_publicchain_dev",
-        "password":"tech_fudan_publicchain_dev_8bd20c",
-        "authMechanism":"SCRAM-SHA-1"
+        "DB_CONN_STR":"",
+        "user":"",
+        "password":"",
+        "authMechanism":""
     }
 }
 module.exports = config;
