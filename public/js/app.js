@@ -132,7 +132,7 @@ function createGraph(){
         best_parent_unit : true,
         data:data3,
     }
-    console.log(data);
+    //console.log(data);
     nodes = data.nodes;
     edges = data.edges;
     var graph = new dagre.graphlib.Graph({
@@ -159,7 +159,7 @@ function createGraph(){
 		}
 	}
     dagre.layout(graph);
-    console.log(graph);
+    //console.log(graph);
     return graph;
 }
 
