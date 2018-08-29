@@ -56,3 +56,20 @@ data_damo();
          source: '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
          target: '/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=' } } }
 */
+
+// { nodes:
+//     [ { data:{ hash: '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
+//         hash_s: '/3WhIDC...' },
+//         Type: 1,
+//         Height: 0,
+//         timestamp:123123
+//         },
+//       { data: { Hash: '/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
+//         Hash_s: '/3AAIDC...' },
+//         Type: 1,
+//         Height: 1,
+//         timestamp:123121
+//          } ],
+//    edges: { data: { link_type: 1, data:{ id: 'link_ID',
+//          source: '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
+//          target: '/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=' } } }

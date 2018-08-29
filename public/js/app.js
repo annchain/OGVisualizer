@@ -6,9 +6,12 @@ var nodes, edges;
 var tx_list = [];
 var phantoms = {};
 var phantomsTop = {};
+var generateOffset = 0;
+var notLastUnitUp = false;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
+$('#cy, #scroll, #goToTop').show();
 
 initSocket();
 
@@ -85,7 +88,7 @@ function createCy(){
 		if (page == 'dag') {
 			e.preventDefault();
 			if (deltaY > 0) {
-				//scrollUp();
+				scrollUp();
 			}
 			else if (deltaY < 0) {
 				cy.panBy({x: 0, y: -25});
@@ -112,7 +115,7 @@ function createGraph(){
     }
     data.nodes.push(a);
     var data2 = {
-        unit : '/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
+        unit : '/3AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
         unit_s : '/3AAIDC...'
     }
     var b = {
@@ -122,17 +125,56 @@ function createGraph(){
         rowid : 4071778,
         sequence : "good"
     }
-    data.nodes.push(b);
-    data3 = {
+	data.nodes.push(b);
+	var data3 = {
+        unit : 'AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
+        unit_s : 'AAAAIDC...'
+    }
+    var c = {
+        data : data3,
+        is_on_main_chain : 1,
+        is_stable : 0,
+        rowid : 4071779,
+        sequence : "good"
+	}
+	data.nodes.push(c);
+    dataA = {
         id :"99031584-2b04-42c8-82f3-efdc4a241ba8",
         source : "/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
+	}
+	dataB = {
+        id :"88888584-2b04-42c8-82f3-efdc4a241ba8",
+        source : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
+        target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
+	}
+	dataC = {
+        id :"66666584-2b04-42c8-82f3-efdc4a241ba8",
+        source : "/3AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
+        target : "/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
+	}
+	dataD = {
+        id :"55555584-2b04-42c8-82f3-efdc4a241ba8",
+        source : "/3AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
+        target : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
     }
-    data.edges.data = {
+    data.edges.dataA = {
         best_parent_unit : true,
-        data:data3,
+        data : dataA,
+	}
+	data.edges.dataB = {
+        best_parent_unit : true,
+        data : dataB,
+	}
+	data.edges.dataC = {
+        best_parent_unit : true,
+        data : dataC,
+	}
+	data.edges.dataD = {
+        best_parent_unit : true,
+        data : dataD,
     }
-    //console.log(data);
+    console.log(data);
     nodes = data.nodes;
     edges = data.edges;
     var graph = new dagre.graphlib.Graph({
@@ -164,7 +206,7 @@ function createGraph(){
 }
 
 function generate() {
-	var generateOffset = 0,newOffset_x, newOffset_y, left = Infinity, right = -Infinity, first = false, generateAdd = [], _node,
+	var newOffset_x, newOffset_y, left = Infinity, right = -Infinity, first = false, generateAdd = [], _node,
 		classes = '', pos_iomc;
 	var graph = createGraph();
 	graph.nodes().forEach(function(unit) {
@@ -306,6 +348,18 @@ function updateScrollHeigth() {
 	}, 1);
 }
 
+function scrollUp() {
+	var ext = cy.extent();
+	if ((notLastUnitUp === false && ext.y2 - (ext.h / 2) > cy.getElementById(nodes[0].data.unit).position().y + 20) ||
+		(notLastUnitUp === true && ext.y2 - (ext.h) > cy.getElementById(nodes[0].data.unit).position().y)
+	) {
+		cy.panBy({x: 0, y: 25});//scrollUp
+	}
+	else if (notLastUnitUp === true) {
+		//getPrev();
+	}
+}
+
 function updListNotStableUnit() {
 	if (!cy) return;
 	notStable = [];
@@ -407,6 +461,16 @@ function convertPosPanToPosScroll(posY, topPos) {
 	if (!posY) posY = cy.pan('y');
 	if (topPos === undefined) topPos = scrollTopPos;
 	return ((scroll.height() / 2) - topPos) - posY;
+}
+
+function goToTop() {
+	var el = cy.getElementById(nodes[0].data.unit);
+		cy.stop();
+		cy.animate({
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y}
+		}, {
+			duration: 400
+		});
 }
 
 // 初始化 websocket
