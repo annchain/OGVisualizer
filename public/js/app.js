@@ -18,6 +18,7 @@ var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
 
 initSocket();
+var t1 = window.setTimeout(start,1000);
 
 function createCy(){
      cy = cytoscape({
@@ -159,7 +160,7 @@ function generate(data) {
 	graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
-			console.log(_node.x,_node.y);
+			//console.log(_node.x,_node.y);
 			if (_node.x < left) left = _node.x;
 			if (_node.x > right) right = _node.x;
 		}
@@ -217,7 +218,7 @@ function setNew(data, newUnits){
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
-            console.log(_node);
+            //console.log(_node);
 			y = _node.y;
 			if (y < min) min = y;
 			if (y > max) max = y;
@@ -251,7 +252,7 @@ function setNew(data, newUnits){
 					position: {x: phantomsTop[unit], y: _node.y + newOffset_y},
 					classes: classes
 				});
-				console.log(_node.y + newOffset_y)
+				//console.log(_node.y + newOffset_y)
 				delete phantomsTop[unit];
 			} else {
 				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
@@ -264,7 +265,7 @@ function setNew(data, newUnits){
 					position: {x: pos_iomc, y: _node.y + newOffset_y},
 					classes: classes
 				});
-				console.log(_node.y,newOffset_y,_node.y + newOffset_y);
+				//console.log(_node.y,newOffset_y,_node.y + newOffset_y);
 			}
 		}
     });
@@ -470,7 +471,7 @@ function goToTop() {
 
 function initSocket(){
 	ws.onopen = function(){  
-		console.log('open');
+		console.log('socket open');
 	};	
 }
 
@@ -551,7 +552,7 @@ function pause(){
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		//console.log(JSON.parse(data.data));
+		console.log("websocket",JSON.parse(data.data));
 		setNew(JSON.parse(data.data),true);
 	}
 }
