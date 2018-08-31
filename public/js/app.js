@@ -171,8 +171,6 @@ function generate(data) {
 			classes = '';
 			if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
 			if (_node.is_stable) classes += 'is_stable ';
-			if (_node.sequence === 'final-bad') classes += 'finalBad';
-			if (_node.sequence === 'temp-bad') classes += 'tempBad';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = generateOffset - _node.y + 66;
@@ -232,8 +230,6 @@ function setNew(data, newUnits){
 			classes = '';
 			if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
 			if (_node.is_stable) classes += 'is_stable ';
-			if (_node.sequence === 'final-bad') classes += 'finalBad';
-			if (_node.sequence === 'temp-bad') classes += 'tempBad';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 66;
