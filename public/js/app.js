@@ -239,13 +239,14 @@ function setNew(data, newUnits){
 				 	animationPanUp(max + 54);
 				}
 			}
-			//console.log(phantomsTop[unit]);
+			var random = randomNum(-25,30);
+			//console.log(random);
 			if (phantomsTop[unit] !== undefined) {
 				cy.remove(cy.getElementById(unit));
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit], y: _node.y + newOffset_y},
+					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y},
 					classes: classes
 				});
 				//console.log(_node.y + newOffset_y)
@@ -258,7 +259,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc, y: _node.y + newOffset_y},
+					position: {x: pos_iomc+random, y: _node.y + newOffset_y},
 					classes: classes
 				});
 				//console.log(_node.y,newOffset_y,_node.y + newOffset_y);
@@ -450,6 +451,20 @@ function goToTop() {
 		}, {
 			duration: 400
 		});
+}
+
+function randomNum(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
 }
 
 // 初始化 websocket
