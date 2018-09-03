@@ -411,6 +411,36 @@ label {
 	margin-left: 40px;
 }
 
+#plus {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background: url(/img/plus.svg) center no-repeat;
+	background-size: 28px;
+	top: 750px;
+	left: 34%;
+	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
+#minus {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background: url(/img/minus.svg) center no-repeat;
+	background-size: 28px;
+	top: 800px;
+	left: 34%;
+	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
 #goToTop:hover {
 	background: url(/img/goToTop_hover.svg) center no-repeat;
 	background-size: 28px;

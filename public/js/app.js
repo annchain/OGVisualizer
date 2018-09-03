@@ -12,6 +12,7 @@ var generateOffset = 0;
 var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
+var zoomSet = 1.01;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -467,6 +468,16 @@ function randomNum(minNum,maxNum){
     } 
 }
 
+function plus(){
+	zoomSet += 0.1
+	cy.viewport({zoom: zoomSet});
+}
+
+function minus(){
+	zoomSet -= 0.1
+	cy.viewport({zoom: zoomSet});
+}
+
 // 初始化 websocket
 
 // function initSocket(){
@@ -536,7 +547,7 @@ function start(){
     createCy();
 	generate(data);
 	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
-    cy.viewport({zoom: 1.01});
+    cy.viewport({zoom: zoomSet});
 	cy.center(cy.nodes()[0]);
 	page = 'dag';
 	var startMsg = "{\"event\":\"new_unit\"}";
