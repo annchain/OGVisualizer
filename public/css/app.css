@@ -358,7 +358,7 @@ label {
 	bottom: 0;
 	width: 50px;
 	overflow: auto;
-	z-index: 999;
+	z-index: 990;
 	margin-right: 1px;
 }
 

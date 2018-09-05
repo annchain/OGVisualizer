@@ -13,6 +13,7 @@ var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
 var zoomSet = 1.01;
+var timerInfoMessage;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -41,46 +42,30 @@ function createCy(){
 					'font-size': '13px',
 					'text-margin-y': '5px',
 					'background-color': '#fff',
-					'border-width': 1,
-					'border-color': '#2980b9',
-					//	'border-color': '#333',
-					//	'border-style': 'dotted',
-					'width': 25,
-					'height': 25
+					'border-width': 4,
+					'border-color': '#1754c2',
+					// 'border-color': '#333',
+					// 'border-style': 'dotted',
+					'width': 20,
+					'height': 20
 				}
-            },
-            {
-                selector: 'node.hover',
-				style: {
-					'content': 'data(id)',
-					'text-opacity': 1,
-					'font-weight': 'bold',
-					'font-size': '14px',
-					'text-background-color': '#fff',
-					'text-background-opacity': 1,
-					'text-background-shape': 'rectangle',
-					'text-border-opacity': 1,
-					'text-border-width': 4,
-					'text-border-color': '#fff',
-                    'z-index': 9999
-                }
             },
             {
 				selector: 'edge',
 				style: {
 					'width': 2,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#2980b9',
-					'target-arrow-color': '#2980b9',
+					'line-color': '#6495ed',
+					'target-arrow-color': '#6495ed',
 					'curve-style': 'bezier'
 				}
 			},{
 				selector: '.best_parent_unit',
 				style: {
-					'width': 5,
+					'width': 4,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#2980b9',
-					'target-arrow-color': '#2980b9',
+					'line-color': '#6495ed',
+					'target-arrow-color': '#6495ed',
 					'curve-style': 'bezier'
 				}
 			},{
@@ -88,9 +73,9 @@ function createCy(){
 				style: {
 					//	'border-width': 4,
 					//	'border-style': 'solid',
-					//	'border-color': '#2980b9'
+					//	'border-color': '#6495ed'
 					//	'border-color': '#333'
-					'background-color': '#9cc0da'
+					'background-color': '#6495ed'
 				}
 			}
         ],
@@ -105,7 +90,11 @@ function createCy(){
 
 	cy.on('mouseout', 'node', function() {
 		this.removeClass('hover');
-    });
+	});
+	
+	cy.on('click', 'node', function(evt) {
+		location.hash = '#' + evt.cyTarget.id();
+	});
     
     $(cy.container()).on('wheel mousewheel', function(e) {
 		var deltaY = e.originalEvent.wheelDeltaY || -e.originalEvent.deltaY;
@@ -438,6 +427,16 @@ function fixConflicts(arr) {
 	return arr;
 }
 
+function searchForm(text) {
+	if (text.length == 44 || text.length == 32) {
+		location.hash = text;
+	}
+	else {
+		showInfoMessage("Please enter a unit or address");
+	}
+	$('#inputSearch').val('');
+}
+
 function convertPosPanToPosScroll(posY, topPos) {
 	if (!posY) posY = cy.pan('y');
 	if (topPos === undefined) topPos = scrollTopPos;
@@ -469,14 +468,56 @@ function randomNum(minNum,maxNum){
 }
 
 function plus(){
-	zoomSet += 0.1
+	zoomSet += 0.25
 	cy.viewport({zoom: zoomSet});
 }
 
 function minus(){
-	zoomSet -= 0.1
+	zoomSet -= 0.25
 	cy.viewport({zoom: zoomSet});
 }
+
+function adaptiveShowInfo() {
+	$('#cy, #scroll, #goToTop').addClass('showInfoBlock');
+	$('#info').removeClass('hideInfoBlock');
+}
+
+function showInfoMessage(text, timeMs) {
+	if (!timeMs) timeMs = 3000;
+	if (timerInfoMessage) clearTimeout(timerInfoMessage);
+
+	$('#infoMessage').html(text).show(350);
+	timerInfoMessage = setTimeout(function() {
+		$('#infoMessage').hide(350).html('');
+	}, timeMs);
+}
+
+function hideInfoMessage() {
+	if (timerInfoMessage) clearTimeout(timerInfoMessage);
+	$('#infoMessage').hide(350).html('');
+}
+
+function closeInfo() {
+	$('#info').addClass('hideInfoBlock');
+	$('#cy, #scroll, #goToTop').removeClass('showInfoBlock');
+}
+
+//event
+
+window.addEventListener('hashchange', function() {
+	if (location.hash.length == 45 || location.hash.length == 33) {
+		console.log(location.hash.substr(1));
+		adaptiveShowInfo();
+		showInfoMessage("Address not found")
+		$('#unit').html(location.hash.substr(1));
+		$('#listInfo').show();
+		//get unit info api
+		//highlightNode(location.hash.substr(1));
+		if ($('#addressInfo').css('display') == 'block') {
+			$('#addressInfo').hide();
+		}
+	}
+});
 
 // 初始化 websocket
 
@@ -525,12 +566,12 @@ function start(){
         sequence : "good"
 	}
 	data.nodes.push(c);
-    dataA = {
+    var dataA = {
         id :"99031584-2b04-42c8-82f3-efdc4a241ba8",
         source : "/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
 	}
-	dataB = {
+	var dataB = {
         id :"88888584-2b04-42c8-82f3-efdc4a241ba8",
         source : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
@@ -552,7 +593,7 @@ function start(){
 	page = 'dag';
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
-    read_new_Tx();
+	read_new_Tx();
     // read_update_Tx();
     //console.log(tx_list);
 }
