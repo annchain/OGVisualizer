@@ -42,12 +42,12 @@ function createCy(){
 					'font-size': '13px',
 					'text-margin-y': '5px',
 					'background-color': '#fff',
-					'border-width': 4,
+					'border-width': 2,
 					'border-color': '#1754c2',
 					// 'border-color': '#333',
 					// 'border-style': 'dotted',
-					'width': 20,
-					'height': 20
+					'width': 10,
+					'height': 10
 				}
             },
             {
@@ -60,13 +60,25 @@ function createCy(){
 					'curve-style': 'bezier'
 				}
 			},{
-				selector: '.best_parent_unit',
+				selector: '.comfirmed_unit',
 				style: {
-					'width': 4,
-					'target-arrow-shape': 'triangle',
-					'line-color': '#6495ed',
-					'target-arrow-color': '#6495ed',
-					'curve-style': 'bezier'
+					'width-width': 2,
+					'border-color': '#3cb371',
+					'background-color': '#3cb371',
+				}
+			},{
+				selector: '.pending_unit',
+				style: {
+					'border-width': 2,
+					'background-color': '#1754c2',
+					'border-color': '#1754c2'
+				}
+			},{
+				selector: '.sequencer_unit',
+				style: {
+					'border-width': 2,
+					'background-color': '#ff69b4',
+					'border-color': '#ff69b4'
 				}
 			},{
 				selector: '.is_on_main_chain',
@@ -128,8 +140,7 @@ function createGraph(data){
 			label: node.data.unit_s,
 			width: 32,
 			height: 32,
-			is_on_main_chain: node.is_on_main_chain,
-			is_stable: node.is_stable,
+			type: node.type,
 			sequence: node.sequence
 		});
     });
@@ -159,11 +170,13 @@ function generate(data) {
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
-			if (_node.is_stable) classes += 'is_stable ';
+			console.log(_node);
+			classes += _node.type;
+			//if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
+			//if (_node.is_stable) classes += 'is_stable ';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
-				newOffset_y = generateOffset - _node.y + 66;
+				newOffset_y = generateOffset - _node.y + 22;
 				first = true;
 			}
 			if (phantoms[unit] !== undefined) {
@@ -178,7 +191,7 @@ function generate(data) {
 			}
 			else {
 				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
-				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
+				if (pos_iomc == 0 && _node.type == "comfirmed_unit") {
 					pos_iomc += 40;
 				}
 				generateAdd.push({
@@ -218,8 +231,10 @@ function setNew(data, newUnits){
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
-			if (_node.is_stable) classes += 'is_stable ';
+			console.log(_node.type)
+			classes += _node.type;
+			//if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
+			//if (_node.is_stable) classes += 'is_stable ';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 66;
@@ -258,9 +273,20 @@ function setNew(data, newUnits){
     });
     generateAdd = fixConflicts(generateAdd);
     cy.add(generateAdd);
-    cy.add(createEdges());  
+	cy.add(createEdges()); 
     updListNotStableUnit();
 	updateScrollHeigth(); 
+}
+//addClass
+function updateClass(){
+	// cy.$('#j')
+  	// 	.data('weight', '70')   // style update
+  	// 	.addClass('funny')      // style update AGAIN
+  	// 	.removeClass('serious') // style update YET AGAIN s
+	var unit = '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=';
+	console.log(cy.getElementById(unit));
+	cy.getElementById(unit).removeClass('is_on_main_chain')
+	cy.getElementById(unit).addClass('comfirmed_unit');
 }
 
 function animationPanUp(distance) {
@@ -548,8 +574,7 @@ function start(){
     }
     var a = {
         data : data1,
-        is_on_main_chain : 0,
-        is_stable : 0,
+        type : "comfirmed_unit",
         rowid : 4071777,
         sequence : "good"
     }
@@ -560,8 +585,7 @@ function start(){
     }
     var c = {
         data : data3,
-        is_on_main_chain : 1,
-        is_stable : 0,
+        type : "pending_unit",
         rowid : 4071779,
         sequence : "good"
 	}
@@ -584,7 +608,7 @@ function start(){
         best_parent_unit : true,
         data : dataB,
 	}
-    //console.log(data);
+    console.log(data);
     createCy();
 	generate(data);
 	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;

@@ -11,17 +11,27 @@
     <div id="menu" class="rowFull">
         <div id="menuLeft">
             <a href="https://www.zhongan.io/" id="menuLeftImg"><img src="/img/logo.png"></a>
-            <div id="menuLeftTitle"><a href="https://www.zhongan.io/">OG</a></div>
-            <div id="menuInput">
+            <div id="menuLeftTitle"><a href="https://www.zhongan.io/">OG visualizer</a></div>
+            <div id="menuInput" class="search bar7">
+                    <form>
+                        <input type="text" id="inputSearch" placeholder="Search for unit or address">
+                        <button type="submit" id="submitSearch"></button>
+                    </form>
+            </div>
+            <!-- <div id="menuRight">
+                <a href="https://www.zhongan.io/" id="menuLeftImg"><img src="/img/annotation.svg"></a>                
+            </div> -->
+            <!-- <div id="menuInput">
                 <form action="javascript:searchForm($('#inputSearch').val())" method="post">
                     <input type="text" id="inputSearch" placeholder="Search for unit or address">
                     <input type="submit" value="" id="submitSearch">
-                </form>
-            </div>
+                </form> 
+            </div> -->
         </div>
     </div>
     <div id="infoMessage" onclick="hideInfoMessage()">InfoMessage</div>
     <div id="cy"></div>
+    <div id="annotation"></div>
     <div id="goToTop" onclick="goToTop()">
         <div id="titleGoToTop">Go to top</div>
     </div>

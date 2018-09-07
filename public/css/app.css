@@ -12,18 +12,23 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	border-bottom: 1px solid #ccc;
+	background-color: #86cad9;
+	border-bottom: 1px solid #86cad9;
 }
 
 #menuInput {
 	float: left;
-	margin-left: 15px;
+	margin-left: -24px;
+	/* background-color: #8dbbf9; */
 }
+
+
 
 #menu input[type=text] {
 	width: 280px;
 	height: 30px;
-	border: 1px solid #ccc;
+	background-color: #fff;
+	border: 1px solid #fff;
 	outline: none;
 	padding: 0 35px 0 5px;
 }
@@ -37,7 +42,7 @@ body {
 	cursor: pointer;
 	outline: none;
 	position: relative;
-	left: -36px;
+	left: 320px;
 	vertical-align: middle;
 }
 
@@ -56,12 +61,28 @@ body {
 
 #menuLeftTitle {
 	float: left;
-	padding: 5px 5px 7px 7px;
+	padding: 5px 5px 10px 10px;
 	font-size: 17px;
 }
 
 #menuLeftTitle a {
 	color: #000;
+}
+
+#menuRight {
+	padding: 7px;
+	padding-top: 0px;
+    padding-left: 1000px;
+}
+
+#menuRightImg {
+	float: right;
+	margin-left: 5px;
+}
+
+menuAnnotation{
+	float: right;
+	padding: 5px;
 }
 
 #menuSocial {
@@ -366,6 +387,21 @@ label {
 	width: 1px;
 }
 
+#annotation {
+	width: 300px;
+	height: 100px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background: url(/img/annotation.svg) center no-repeat;
+	background-size: 300px;
+	top: 30px;
+	left: 78%;
+	/* border: 1px solid #5e5e5e; */
+	border-radius: 300%;
+	margin-left: 40px;
+}
+
 #goToTop {
 	width: 48px;
 	height: 48px;
@@ -451,6 +487,15 @@ label {
 	display: block;
 } */
 
+#titleAnnotation {
+	position: absolute;
+	top: 52px;
+	text-align: center;
+	width: 68px;
+	left: 50px;
+	display: block;
+}
+
 #titleGoToTop {
 	position: absolute;
 	top: 52px;
@@ -486,6 +531,20 @@ label {
 	width: 100%;
     border-collapse: collapse;
 }
+/*搜索框7*/
+      
+.bar7 form {
+	height:42px;
+}
+.bar7 input {
+	width:200px;
+	border-radius:42px;
+	border:2px solid #324B4E;
+	background:#F9F0DA;
+	transition:.3s linear;
+	float:right;
+}
+
 /* adaptive */
 
 @media all and (max-width: 1200px) {

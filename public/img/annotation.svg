@@ -1,0 +1,23 @@
+<svg width="1600" height="1200" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="1202" width="1602" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse stroke="#3252b3" ry="61.171595" rx="60.347287" id="svg_3" cy="599.999973" cx="140" stroke-width="20" fill="#ffffff"/>
+  <text style="cursor: move;" stroke="#d6d60c" transform="matrix(2.2149155139923096,0,0,2.2149155139923096,-24.29831027984619,-736.1249031499028) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="611.670987" x="110" stroke-width="0" fill="#3252b3">tip</text>
+  <ellipse stroke="#3252b3" ry="61.171595" rx="60.347287" id="svg_12" cy="600" cx="420" stroke-width="4" fill="#3252b3"/>
+  <text stroke="#d6d60c" transform="matrix(2.2149155139923096,0,0,2.2149155139923096,-24.29831027984619,-736.1249031499028) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_14" y="612" x="230" stroke-width="0" fill="#3252b3">pending</text>
+  <ellipse stroke="#5db177" ry="61.171595" rx="60.347287" id="svg_15" cy="600" cx="800" stroke-width="4" fill="#5db177"/>
+  <text stroke="#d6d60c" transform="matrix(2.2149155139923096,0,0,2.2149155139923096,-24.29831027984619,-736.1249031499028) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_18" y="612" x="410" stroke-width="0" fill="#5db177">comfirmed</text>
+  <ellipse stroke="#5db177" ry="61.171595" rx="60.347287" id="svg_19" cy="600" cx="800" stroke-width="4" fill="#5db177"/>
+  <ellipse stroke="#f072b2" ry="61.171595" rx="60.347287" id="svg_20" cy="600" cx="1250" stroke-width="4" fill="#f072b2"/>
+  <text style="cursor: move;" stroke="#d6d60c" transform="matrix(2.2149155139923096,0,0,2.2149155139923096,-24.29831027984619,-736.1249031499028) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_21" y="612" x="610" stroke-width="0" fill="#f072b2">sequencer</text>
+ </g>
+</svg>
