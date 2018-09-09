@@ -116,7 +116,7 @@ menuAnnotation{
 #cy {
 	position: absolute;
 	right: 0;
-	left: 34%;
+	left: 0%;
 	top: 45px;
 	bottom: 0;
 	z-index: 999;
@@ -127,7 +127,7 @@ menuAnnotation{
 	left: 0;
 	top: 45px;
 	bottom: 0;
-	width: 34%;
+	width: 0%;
 	border-right: 1px solid #ccc;
 	overflow: auto;
 }
@@ -388,15 +388,15 @@ label {
 }
 
 #annotation {
-	width: 300px;
-	height: 100px;
+	width: 500px;
+	height: 150px;
 	position: absolute;
 	z-index: 999;
 	cursor: pointer;
 	background: url(/img/annotation.svg) center no-repeat;
 	background-size: 300px;
-	top: 30px;
-	left: 78%;
+	top: 24px;
+	left: 70%;
 	/* border: 1px solid #5e5e5e; */
 	border-radius: 300%;
 	margin-left: 40px;
@@ -411,7 +411,7 @@ label {
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
 	top: 68px;
-	left: 34%;
+	left: 25%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -426,7 +426,7 @@ label {
 	background: url(/img/start.svg) center no-repeat;
 	background-size: 28px;
 	top: 158px;
-	left: 34%;
+	left: 25%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -441,7 +441,7 @@ label {
 	background: url(/img/pause.svg) center no-repeat;
 	background-size: 28px;
 	top: 248px;
-	left: 34%;
+	left: 25%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -456,7 +456,7 @@ label {
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
 	top: 750px;
-	left: 34%;
+	left: 25%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -471,7 +471,7 @@ label {
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
 	top: 800px;
-	left: 34%;
+	left: 25%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
