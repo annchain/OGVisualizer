@@ -588,7 +588,7 @@ function start(){
     }
     var a = {
         data : data1,
-        type : "pending_unit",
+        type : "",
         // rowid : 4071777,
         // sequence : "good"
     }
@@ -599,7 +599,7 @@ function start(){
 	}
 	var b = {
         data : data2,
-        type : "pending_unit",
+        type : "",
         // rowid : 4071779,
         // sequence : "good"
 	}
@@ -610,7 +610,7 @@ function start(){
 	}
     var c = {
         data : data3,
-        type : "pending_unit",
+        type : "",
         // rowid : 4071779,
         // sequence : "good"
 	}
