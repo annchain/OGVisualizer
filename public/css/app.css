@@ -411,7 +411,7 @@ label {
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
 	top: 68px;
-	left: 25%;
+	left: 0%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -426,7 +426,7 @@ label {
 	background: url(/img/start.svg) center no-repeat;
 	background-size: 28px;
 	top: 158px;
-	left: 25%;
+	left: 0%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -441,7 +441,7 @@ label {
 	background: url(/img/pause.svg) center no-repeat;
 	background-size: 28px;
 	top: 248px;
-	left: 25%;
+	left: 0%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -456,7 +456,7 @@ label {
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
 	top: 750px;
-	left: 25%;
+	left: 0%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -471,7 +471,7 @@ label {
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
 	top: 800px;
-	left: 25%;
+	left: 0%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
