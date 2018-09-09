@@ -12,8 +12,8 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	background-color: #86cad9;
-	border-bottom: 1px solid #86cad9;
+	background-color: #76d2ca;
+	border-bottom: 1px solid #76d2ca;
 }
 
 #menuInput {
@@ -72,7 +72,7 @@ body {
 #menuRight {
 	padding: 7px;
 	padding-top: 0px;
-    padding-left: 1000px;
+    padding-left: 1330px;
 }
 
 #menuRightImg {
