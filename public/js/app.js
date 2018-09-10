@@ -14,6 +14,12 @@ var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
 var zoomSet = 1.01;
 var timerInfoMessage;
+var tip_index = [];
+var new_tip_index = [];
+var old_tip_index = [];
+var pending_index = [];
+var comfirmed_index = [];
+var sequencer_index = [];
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -144,10 +150,17 @@ function createGraph(data){
 			sequence: node.sequence
 		});
     });
-    for (var k in data.edges) {
-		if (data.edges.hasOwnProperty(k)) {
-			graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
-		}
+    // for (var k in data.edges) {
+	// 	if (data.edges.hasOwnProperty(k)) {
+	// 		graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
+	// 	}
+	// }
+	//console.log(data.edges);
+	if (data.edges){
+		data.edges.forEach(function(edge){
+			//console.log(edge);
+			// graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
+		})
 	}
     dagre.layout(graph);
     //console.log(graph);
@@ -170,7 +183,7 @@ function generate(data) {
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			console.log(_node);
+			//console.log(_node);
 			classes += _node.type;
 			//if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
 			//if (_node.is_stable) classes += 'is_stable ';
@@ -206,10 +219,10 @@ function generate(data) {
 	generateAdd = fixConflicts(generateAdd);
 	generateAdd[2].position.x = -82-82;
 	// generateAdd[1].position.x = 0;
-	console.log(generateAdd);
+	//console.log(generateAdd);
 	cy.add(generateAdd);
 	generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
-	console.log(generateOffset);
+	//console.log(generateOffset);
 	nextPositionUpdates = generateOffset;
 	cy.add(createEdges());
 	updListNotStableUnit();
@@ -255,7 +268,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y},
+					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y + random},
 					classes: classes
 				});
 				//console.log(_node.y + newOffset_y)
@@ -268,21 +281,23 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+random, y: _node.y + newOffset_y},
+					position: {x: pos_iomc+random, y: _node.y + newOffset_y + random},
+					//position: {x: pos_iomc+random, y: _node.y + newOffset_y},
 					classes: classes
 				});
 				//console.log(_node.y,newOffset_y,_node.y + newOffset_y);
 			}
 		}
     });
-    generateAdd = fixConflicts(generateAdd);
+	generateAdd = fixConflicts(generateAdd);
+	console.log(generateAdd);
     cy.add(generateAdd);
 	cy.add(createEdges()); 
     updListNotStableUnit();
 	updateScrollHeigth(); 
 }
 //addClass
-function updateClass_sequencer_unit(uint){
+function updateClass_sequencer_unit(unit){
 	// cy.$('#j')
   	// 	.data('weight', '70')   // style update
   	// 	.addClass('funny')      // style update AGAIN
@@ -292,7 +307,7 @@ function updateClass_sequencer_unit(uint){
 	cy.getElementById(unit).addClass('sequencer_unit');
 }
 
-function updateClass_comfirmed_unit(uint){
+function updateClass_comfirmed_unit(unit){
 	// cy.$('#j')
   	// 	.data('weight', '70')   // style update
   	// 	.addClass('funny')      // style update AGAIN
@@ -406,31 +421,31 @@ function createEdges() {
 		if (_edges.hasOwnProperty(k)) {
 			classes = '';
 			classes += _edges[k].best_parent_unit ? 'best_parent_unit' : '';
-			if (cy.getElementById(_edges[k].data.target).length) {
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+			if (cy.getElementById(_edges[k].target).length) {
+				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 			else {
-				position = cy.getElementById(_edges[k].data.source).position();
-				phantoms[_edges[k].data.target] = position.x + offset;
+				position = cy.getElementById(_edges[k].source).position();
+				phantoms[_edges[k].target] = position.x + offset;
 				out.push({
 					group: "nodes",
-					data: {id: _edges[k].data.target, unit_s: _edges[k].data.target.substr(0, 7) + '...'},
+					data: {id: _edges[k].target, unit_s: _edges[k].target.substr(0, 7) + '...'},
 					position: {x: position.x + offset, y: generateOffset + 166},
 					classes : 'sequencer_unit'//first unit classes
 				});
 				offset += 60;
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
-			if (!cy.getElementById(_edges[k].data.source).length) {
-				position = cy.getElementById(_edges[k].data.target).position();
-				phantomsTop[_edges[k].data.source] = position.x + offsetTop;
+			if (!cy.getElementById(_edges[k].source).length) {
+				position = cy.getElementById(_edges[k].target).position();
+				phantomsTop[_edges[k].source] = position.x + offsetTop;
 				out.push({
 					group: "nodes",
-					data: {id: _edges[k].data.source, unit_s: _edges[k].data.source.substr(0, 7) + '...'},
+					data: {id: _edges[k].source, unit_s: _edges[k].source.substr(0, 7) + '...'},
 					position: {x: position.x + offsetTop, y: newOffset - 166}
 				});
 				offsetTop += 60;
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 		}
 	}
@@ -581,7 +596,7 @@ function initSocket(){
 function start(){
 	var data = {};
     data.nodes = [];
-    data.edges = {};
+    data.edges = [];
     var data1 = {
         unit : 'AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
         unit_s : 'AAAAIDC...'
@@ -620,32 +635,28 @@ function start(){
         source : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
 	}
+	data.edges.push(dataA);
 	var dataB = {
         id :"BBBBBBBB-2b04-42c8-82f3-efdc4a241ba8",
         source : "BBBBIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
 	}
+	data.edges.push(dataB);
 	var dataC = {
         id :"CCCCCCCC-2b04-42c8-82f3-efdc4a241ba8",
         source : "CCCCIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
         target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
 	}
-    data.edges.dataA = {
-        // best_parent_unit : false,
-        data : dataA,
-	}
-	data.edges.dataB = {
-        // best_parent_unit : false,
-        data : dataB,
-	}
-	data.edges.dataC = {
-		// best_parent_unit : false,
-		data : dataC
-	}
-    console.log(data);
+	data.edges.push(dataC);
+	//console.log(data);
+	// nodes = data.nodes;
+	// edges = data.edges;
+	old_tip_index = data.nodes;
+    //console.log(nodes,edges,old_tip_index);
     createCy();
 	generate(data);
 	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
+	//console.log(cy.getElementById(nodes[0].data.unit));
     cy.viewport({zoom: zoomSet});
 	cy.center(cy.nodes()[0]);
 	page = 'dag';
@@ -653,7 +664,10 @@ function start(){
 	ws.send(startMsg);
 	read_new_Tx();
     // read_update_Tx();
-    //console.log(tx_list);
+	//console.log(tx_list);
+	/*        gen new unit and show          */
+	//read_random_tx();
+	setInterval("painting()",300);
 }
 
 function pause(){
@@ -673,7 +687,7 @@ function pause(){
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		console.log("websocket",JSON.parse(data.data));
+		//console.log("websocket",JSON.parse(data.data));
 		setNew(JSON.parse(data.data),true);
 	}
 }
@@ -685,13 +699,13 @@ function read_update_Tx(){
 }
 
 function update_Tx(update, updateType){
-    console.log("in update");
+    //console.log("in update");
     var txHash = update.hash;
     var milestoneType = update.milestone;
     var confirmationTime = update.ctime;
 
     var hashIndex = tx_list.findIndex(tx => tx.hash === txHash);
-    console.log(hashIndex)
+    //console.log(hashIndex)
     if (hashIndex !== -1 && tx_list[hashIndex] !== undefined) {
         if (updateType === 'txConfirmed' || updateType === 'Milestone') {
             tx_list[hashIndex].ctime = confirmationTime;
@@ -715,4 +729,77 @@ function consoleTx(){
             console.log("@@@@@@@@@@@",tx_list[i])
         }
     }
+}
+
+function read_random_tx(){
+	//console.log(new_tip_index);
+	var Data = {};
+	Data.nodes = new_tip_index;
+	//console.log(Data);
+	//setNew(Data,true);
+	draw_edges(Data);
+	old_tip_index = new_tip_index;
+	new_tip_index = [];
+	//tip_index = [];
+}
+
+function draw_edges(Data){
+	//console.log(Data);
+	var data = {};
+			data.nodes = Data.nodes;
+			data.edges = [];
+	console.log("new",new_tip_index);
+	console.log("old",old_tip_index);
+	new_tip_index.forEach(function(res){
+		var source = res.data.unit;
+		old_tip_index.forEach(function(res){
+			var target = res.data.unit;
+			var id = gen_random_string(36);
+			var dataA = {
+				id :id,
+				source : source,
+				target : target
+			}
+			data.edges.push(dataA);
+		})
+	});
+	//console.log(data);
+	setNew(data,true);
+}
+
+function gen_random_string(len){
+	len = len || 32;
+	var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+	var maxPos = chars.length;
+	var pwd = '';
+	for (i = 0; i < len; i++) {
+		pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+	}
+	return pwd;
+}
+
+function gen_tip_unit(){
+	var unit = gen_random_string(13)+'+HGeknnGW2LOsXgketPUK3dtawgdek=';
+	var unit_s = unit.slice(0,7)+'...';
+	var data = {
+        unit : unit,
+        unit_s : unit_s
+	}
+	//console.log(data);
+	var a = {
+		data : data,
+		type : ""
+	}
+	new_tip_index.push(a);
+	tip_index.push(a);
+	//console.log(tip_index);
+}
+
+function painting(){
+	var random = randomNum(3,10)
+	for(var i=0;i<random;i++){
+		gen_tip_unit();
+	}
+	read_random_tx();
+	goToTop();
 }
