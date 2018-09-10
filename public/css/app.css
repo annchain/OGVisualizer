@@ -70,9 +70,12 @@ body {
 }
 
 #menuRight {
-	padding: 7px;
+	position: absolute;
+	right: 0;
+	left: 79%;
+	/* padding: 7px;
 	padding-top: 0px;
-    padding-left: 1500px;
+    padding-left: 1500px; */
 }
 
 #menuRightImg {

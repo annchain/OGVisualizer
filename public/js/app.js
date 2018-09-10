@@ -52,8 +52,8 @@ function createCy(){
 					'border-color': '#1754c2',
 					// 'border-color': '#333',
 					// 'border-style': 'dotted',
-					'width': 12.5,
-					'height': 12.5
+					'width': 20,
+					'height': 20
 				}
             },
             {
@@ -261,14 +261,14 @@ function setNew(data, newUnits){
 				 	animationPanUp(max + 54);
 				}
 			}
-			var random = randomNum(-25,30);
+			var random = randomNum(-40,20);
 			//console.log(random);
 			if (phantomsTop[unit] !== undefined) {
 				cy.remove(cy.getElementById(unit));
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y + random},
+					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y + random - 250},
 					classes: classes
 				});
 				//console.log(_node.y + newOffset_y)
@@ -281,7 +281,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+random, y: _node.y + newOffset_y + random},
+					position: {x: pos_iomc+random, y: _node.y + newOffset_y + random - 250},
 					//position: {x: pos_iomc+random, y: _node.y + newOffset_y},
 					classes: classes
 				});
@@ -315,6 +315,11 @@ function updateClass_comfirmed_unit(unit){
 	console.log(cy.getElementById(unit));
 	// cy.getElementById(unit).removeClass('is_on_main_chain')
 	cy.getElementById(unit).addClass('comfirmed_unit');
+}
+
+function updateClass_pending_unit(unit){
+	console.log(cy.getElementById(unit));
+	cy.getElementById(unit).addClass('pending_unit');
 }
 
 function animationPanUp(distance) {
@@ -523,12 +528,12 @@ function randomNum(minNum,maxNum){
 }
 
 function plus(){
-	zoomSet += 0.25
+	zoomSet += 0.05
 	cy.viewport({zoom: zoomSet});
 }
 
 function minus(){
-	zoomSet -= 0.25
+	zoomSet -= 0.05
 	cy.viewport({zoom: zoomSet});
 }
 
@@ -648,26 +653,19 @@ function start(){
         target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
 	}
 	data.edges.push(dataC);
-	//console.log(data);
-	// nodes = data.nodes;
-	// edges = data.edges;
 	old_tip_index = data.nodes;
-    //console.log(nodes,edges,old_tip_index);
     createCy();
 	generate(data);
 	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
-	//console.log(cy.getElementById(nodes[0].data.unit));
     cy.viewport({zoom: zoomSet});
 	cy.center(cy.nodes()[0]);
 	page = 'dag';
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
 	read_new_Tx();
-    // read_update_Tx();
-	//console.log(tx_list);
 	/*        gen new unit and show          */
 	//read_random_tx();
-	setInterval("painting()",300);
+	setInterval("painting()",800);
 }
 
 function pause(){
@@ -679,15 +677,8 @@ function pause(){
     });
 }
 
-// function read_new_Tx(){
-//     socket.on('newTX',function(newTX){
-//         tx_list.push(newTX);
-//     })
-// }
-
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		//console.log("websocket",JSON.parse(data.data));
 		setNew(JSON.parse(data.data),true);
 	}
 }
@@ -699,13 +690,11 @@ function read_update_Tx(){
 }
 
 function update_Tx(update, updateType){
-    //console.log("in update");
     var txHash = update.hash;
     var milestoneType = update.milestone;
     var confirmationTime = update.ctime;
 
     var hashIndex = tx_list.findIndex(tx => tx.hash === txHash);
-    //console.log(hashIndex)
     if (hashIndex !== -1 && tx_list[hashIndex] !== undefined) {
         if (updateType === 'txConfirmed' || updateType === 'Milestone') {
             tx_list[hashIndex].ctime = confirmationTime;
@@ -732,19 +721,14 @@ function consoleTx(){
 }
 
 function read_random_tx(){
-	//console.log(new_tip_index);
 	var Data = {};
 	Data.nodes = new_tip_index;
-	//console.log(Data);
-	//setNew(Data,true);
 	draw_edges(Data);
 	old_tip_index = new_tip_index;
 	new_tip_index = [];
-	//tip_index = [];
 }
 
 function draw_edges(Data){
-	//console.log(Data);
 	var data = {};
 			data.nodes = Data.nodes;
 			data.edges = [];
@@ -752,8 +736,8 @@ function draw_edges(Data){
 	console.log("old",old_tip_index);
 	new_tip_index.forEach(function(res){
 		var source = res.data.unit;
-		old_tip_index.forEach(function(res){
-			var target = res.data.unit;
+		for(var i=0;i<2;i++){
+			var target = old_tip_index[Math.floor(Math.random()*old_tip_index.length)].data.unit;
 			var id = gen_random_string(36);
 			var dataA = {
 				id :id,
@@ -761,10 +745,15 @@ function draw_edges(Data){
 				target : target
 			}
 			data.edges.push(dataA);
-		})
+		}
 	});
-	//console.log(data);
 	setNew(data,true);
+	old_tip_index.forEach(function(res){
+		var unit = res.data.unit;
+		updateClass_pending_unit(unit);
+		pending_index.push(res);
+		console.log(pending_index);
+	})
 }
 
 function gen_random_string(len){
@@ -785,14 +774,12 @@ function gen_tip_unit(){
         unit : unit,
         unit_s : unit_s
 	}
-	//console.log(data);
 	var a = {
 		data : data,
 		type : ""
 	}
 	new_tip_index.push(a);
 	tip_index.push(a);
-	//console.log(tip_index);
 }
 
 function painting(){
@@ -801,5 +788,4 @@ function painting(){
 		gen_tip_unit();
 	}
 	read_random_tx();
-	goToTop();
 }
