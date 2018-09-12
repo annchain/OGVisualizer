@@ -20,6 +20,7 @@ var old_tip_index = [];
 var pending_index = [];
 var comfirmed_index = [];
 var sequencer_index = [];
+var IF_FIRST = false;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -587,73 +588,17 @@ function initSocket(){
 }
 
 function start(){
-	var data = {};
-    data.nodes = [];
-    data.edges = [];
-    var data1 = {
-        unit : 'AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
-        unit_s : 'AAAAIDC...'
-    }
-    var a = {
-        data : data1,
-        type : "",
-        // rowid : 4071777,
-        // sequence : "good"
-    }
-	data.nodes.push(a);
-	var data2 = {
-        unit : 'BBBBIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
-        unit_s : 'BBBBIDC...'
-	}
-	var b = {
-        data : data2,
-        type : "",
-        // rowid : 4071779,
-        // sequence : "good"
-	}
-	data.nodes.push(b);
-	var data3 = {
-        unit : 'CCCCIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
-        unit_s : 'CCCCIDC...'
-	}
-    var c = {
-        data : data3,
-        type : "",
-        // rowid : 4071779,
-        // sequence : "good"
-	}
-	data.nodes.push(c);
-    var dataA = {
-        id :"AAAAAAAA-2b04-42c8-82f3-efdc4a241ba8",
-        source : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
-        target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
-	}
-	data.edges.push(dataA);
-	var dataB = {
-        id :"BBBBBBBB-2b04-42c8-82f3-efdc4a241ba8",
-        source : "BBBBIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
-        target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
-	}
-	data.edges.push(dataB);
-	var dataC = {
-        id :"CCCCCCCC-2b04-42c8-82f3-efdc4a241ba8",
-        source : "CCCCIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
-        target : "0000IDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
-	}
-	data.edges.push(dataC);
-	old_tip_index = data.nodes;
-    createCy();
-	generate(data);
+	createCy();
+	read_new_Tx();	
 	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
     cy.viewport({zoom: zoomSet});
 	cy.center(cy.nodes()[0]);
 	page = 'dag';
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
-	read_new_Tx();
 	/*        gen new unit and show          */
 	//read_random_tx();
-	setInterval("painting()",2000);
+	//setInterval("painting()",2000);
 }
 
 function pause(){
@@ -667,7 +612,12 @@ function pause(){
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		setNew(JSON.parse(data.data),true);
+		if(!IF_FIRST){
+			generate(data);
+			IF_FIRST = true;
+		}else{
+			setNew(JSON.parse(data.data),true);
+		}
 	}
 }
 
