@@ -1,4 +1,4 @@
-var ws = new WebSocket('ws://localhost:9090/ws');
+var ws = new WebSocket('ws://localhost:8002/ws');
 // var socketURL = 'https://tanglemonitor.com:4434';
 // var socket = io(socketURL);
 
