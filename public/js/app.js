@@ -588,14 +588,10 @@ function initSocket(){
 }
 
 function start(){
-	createCy();
-	read_new_Tx();	
-	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
-    cy.viewport({zoom: zoomSet});
-	cy.center(cy.nodes()[0]);
-	page = 'dag';
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
+	createCy();
+	read_new_Tx();	
 	/*        gen new unit and show          */
 	//read_random_tx();
 	//setInterval("painting()",2000);
@@ -615,6 +611,10 @@ function read_new_Tx(){
 		if(!IF_FIRST){
 			generate(data);
 			IF_FIRST = true;
+			oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
+			cy.viewport({zoom: zoomSet});
+			cy.center(cy.nodes()[0]);
+			page = 'dag';
 		}else{
 			setNew(JSON.parse(data.data),true);
 		}
