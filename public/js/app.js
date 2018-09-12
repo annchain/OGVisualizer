@@ -213,7 +213,7 @@ function generate(data) {
 		}
 	});
 	generateAdd = fixConflicts(generateAdd);
-	generateAdd[2].position.x = -82-82;
+	//generateAdd[2].position.x = -82-82;
 	// generateAdd[1].position.x = 0;
 	//console.log(generateAdd);
 	cy.add(generateAdd);
@@ -608,8 +608,9 @@ function pause(){
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
+		console.log(JSON.parse(data.data));
 		if(!IF_FIRST){
-			generate(data);
+			generate(JSON.parse(data.data));
 			IF_FIRST = true;
 			oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
 			cy.viewport({zoom: zoomSet});
