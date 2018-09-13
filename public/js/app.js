@@ -1,7 +1,4 @@
-var ws = new WebSocket('ws://localhost:8002/ws');
-// var socketURL = 'https://tanglemonitor.com:4434';
-// var socket = io(socketURL);
-
+var ws = new WebSocket(config.websocket.host);
 var cy;
 var nodes, edges;
 var tx_list = [];
@@ -711,7 +708,7 @@ function gen_tip_unit(){
 	var unit_s = unit.slice(0,7)+'...';
 	var data = {
         unit : unit,
-        // unit_s : unit_s
+        unit_s : unit_s
 	}
 	var a = {
 		data : data,

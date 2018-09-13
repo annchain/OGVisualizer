@@ -6,12 +6,14 @@ var config = {
             "user":"a",
             "password":"a"
             },
-    
     "MongoDB":{
         "DB_CONN_STR":"",
         "user":"",
         "password":"",
         "authMechanism":""
+    },
+    "websocket":{
+        "host":"ws://localhost:8002/ws"
+        //"host":"https://tanglemonitor.com:4434"
     }
 }
-module.exports = config;
