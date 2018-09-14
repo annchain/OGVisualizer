@@ -20,6 +20,8 @@ var old_tip_index = [];
 var pending_index = [];
 var comfirmed_index = [];
 var sequencer_index = [];
+var focus = false;
+var x,y;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -161,7 +163,7 @@ function createGraph(data){
 			// graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
 		})
 	}
-	console.log(graph);
+	//console.log(graph);
     dagre.layout(graph);
     return graph;
 }
@@ -195,12 +197,14 @@ function generate(data) {
 					position: {x: phantoms[unit], y: _node.y + newOffset_y},
 					classes: classes
 				});
+				console.log("phantoms",phantoms[unit],_node.y + newOffset_y);
 				delete phantoms[unit];
 			}
 			else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
+				console.log(_node.x,newOffset_x);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-400,400);
 				if (pos_iomc == 0 && _node.type == "comfirmed_unit") {
-					pos_iomc += 40;
+					pos_iomc += 20;
 				}
 				generateAdd.push({
 					group: "nodes",
@@ -208,13 +212,15 @@ function generate(data) {
 					position: {x: pos_iomc, y: _node.y + newOffset_y},
 					classes: classes
 				});
+				console.log("pos_iomc",pos_iomc,_node.y + newOffset_y);
+
 			}
 		}
 	});
 	generateAdd = fixConflicts(generateAdd);
 	generateAdd[2].position.x = -82-82;
 	// generateAdd[1].position.x = 0;
-	//console.log(generateAdd);
+	console.log(generateAdd);
 	cy.add(generateAdd);
 	generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
 	//console.log(generateOffset);
@@ -247,7 +253,7 @@ function setNew(data, newUnits){
 			classes += _node.type;
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
-				newOffset_y = newOffset - (max - min) + 66;
+				newOffset_y = newOffset - (max - min) + 75;
 				newOffset -= (max - min) + 88;
 				first = true;
 				//console.log(newOffset_x,newOffset_y,newOffset);
@@ -265,7 +271,8 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-500,600);
+				console.log(pos_iomc);
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 40;
 				}
@@ -497,6 +504,7 @@ function goToTop() {
 		}, {
 			duration: 400
 		});
+	focus = false;
 }
 
 function randomNum(minNum,maxNum){ 
@@ -559,6 +567,7 @@ window.addEventListener('hashchange', function() {
 		showInfoMessage("Address not found")
 		$('#unit').html(location.hash.substr(1));
 		$('#listInfo').show();
+		focus = true;
 		//get unit info api
 		//highlightNode(location.hash.substr(1));
 		if ($('#addressInfo').css('display') == 'block') {
@@ -651,6 +660,7 @@ function start(){
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
 	read_new_Tx();
+	
 	/*        gen new unit and show          */
 	//read_random_tx();
 	setInterval("painting()",2000);
@@ -714,6 +724,9 @@ function read_random_tx(){
 	draw_edges(Data);
 	old_tip_index = new_tip_index;
 	new_tip_index = [];
+	if(!focus){
+		goToTop()
+	}
 }
 
 function draw_edges(Data){
@@ -760,7 +773,7 @@ function gen_tip_unit(){
 	var unit_s = unit.slice(0,7)+'...';
 	var data = {
         unit : unit,
-        // unit_s : unit_s
+        unit_s : unit_s
 	}
 	var a = {
 		data : data,
@@ -771,7 +784,7 @@ function gen_tip_unit(){
 }
 
 function painting(){
-	var random = randomNum(1,3)
+	var random = randomNum(1,2)
 	for(var i=0;i<random;i++){
 		gen_tip_unit();
 	}
