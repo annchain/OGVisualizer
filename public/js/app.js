@@ -195,6 +195,7 @@ function generate(data) {
 					position: {x: phantoms[unit], y: _node.y + newOffset_y},
 					classes: classes
 				});
+				console.log("phantoms",phantoms[unit],_node.y + newOffset_y);
 				delete phantoms[unit];
 			}
 			else {
@@ -208,13 +209,15 @@ function generate(data) {
 					position: {x: pos_iomc, y: _node.y + newOffset_y},
 					classes: classes
 				});
+				console.log("pos_iomc",pos_iomc,_node.y + newOffset_y);
+
 			}
 		}
 	});
 	generateAdd = fixConflicts(generateAdd);
 	//generateAdd[2].position.x = -82-82;
 	// generateAdd[1].position.x = 0;
-	//console.log(generateAdd);
+	console.log(generateAdd);
 	cy.add(generateAdd);
 	generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
 	//console.log(generateOffset);
@@ -592,7 +595,7 @@ function start(){
 	var startMsg = "{\"event\":\"new_unit\"}";
 	ws.send(startMsg);
 	createCy();
-	read_new_Tx();	
+	read_new_Tx();
 	/*        gen new unit and show          */
 	//read_random_tx();
 	//setInterval("painting()",2000);
@@ -726,7 +729,7 @@ function gen_tip_unit(){
 }
 
 function painting(){
-	var random = randomNum(1,3)
+	var random = randomNum(1,1)
 	for(var i=0;i<random;i++){
 		gen_tip_unit();
 	}
