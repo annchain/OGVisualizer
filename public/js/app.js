@@ -622,6 +622,9 @@ function read_new_Tx(){
 			page = 'dag';
 		}else{
 			setNew(JSON.parse(data.data),true);
+            if(!focus){
+                goToTop();
+            }
 		}
 	}
 }
