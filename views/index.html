@@ -1,17 +1,17 @@
 {% extends 'layout.html' %}
 
-{% block title  %}  {{title}} {% endblock %}
+{% block title  %}  {{title + " "+ url}} {% endblock %}
 
 {% block head %}
 {{title}}
 
 {% endblock %}
-	
+
 {% block content %}
     <div id="menu" class="rowFull">
         <div id="menuLeft">
             <a href="https://www.zhongan.io/" id="menuLeftImg"><img src="/img/logo.png"></a>
-            <div id="menuLeftTitle"><a href="https://www.zhongan.io/">OG visualizer</a></div>
+            <div id="menuLeftTitle"><a href="https://www.zhongan.io/">OG visualizer at {{ url }}</a></div>
             <div id="menuInput" class="search bar7">
                     <form>
                         <input type="text" id="inputSearch" placeholder="Search for unit or address">
@@ -19,20 +19,20 @@
                     </form>
             </div>
             <div id="menuRight">
-                <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/git.png"></a> 
-                <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/re.png"></a> 
-                <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/google.png"></a> 
+                <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/git.png"></a>
+                <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/re.png"></a>
+                <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/google.png"></a>
                 <!-- <a id="menuLeftImg" href="https://slack.com/" ><img src="/img/Slack_Mark.svg"></a>  -->
-                <a id="menuLeftImg" href="https://facebook.com/" ><img src="/img/face.png"></a> 
-                <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/tw.png"></a> 
-                <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/email.png"></a> 
-                <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/share.png"></a> 
+                <a id="menuLeftImg" href="https://facebook.com/" ><img src="/img/face.png"></a>
+                <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/tw.png"></a>
+                <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/email.png"></a>
+                <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/share.png"></a>
             </div>
             <!-- <div id="menuInput">
                 <form action="javascript:searchForm($('#inputSearch').val())" method="post">
                     <input type="text" id="inputSearch" placeholder="Search for unit or address">
                     <input type="submit" value="" id="submitSearch">
-                </form> 
+                </form>
             </div> -->
         </div>
     </div>

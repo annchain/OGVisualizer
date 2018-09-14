@@ -13,7 +13,7 @@ var config = {
         "authMechanism":""
     },
     "websocket":{
-        "host":"ws://localhost:8002/ws"
+        "host":"localhost:8002/ws"
         //"host":"https://tanglemonitor.com:4434"
     }
 }
