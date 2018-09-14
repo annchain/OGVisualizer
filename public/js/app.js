@@ -61,7 +61,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 2,
+					'width': 1,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#7bc3d4',
 					'target-arrow-color': '#7bc3d4',
@@ -272,7 +272,7 @@ function setNew(data, newUnits){
 				delete phantomsTop[unit];
 			} else {
 				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-500,600);
-				console.log(pos_iomc);
+				//console.log(pos_iomc);
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 40;
 				}
@@ -500,7 +500,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
 		}, {
 			duration: 400
 		});
@@ -784,7 +784,7 @@ function gen_tip_unit(){
 }
 
 function painting(){
-	var random = randomNum(1,2)
+	var random = randomNum(1,1)
 	for(var i=0;i<random;i++){
 		gen_tip_unit();
 	}
