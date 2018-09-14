@@ -265,7 +265,7 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+random(-500,600);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-500,600);
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 40;
 				}
