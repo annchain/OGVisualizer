@@ -144,7 +144,7 @@ menuAnnotation{
 }
 
 #infoClose, #addressClose {
-	text-align: right;
+	text-align: left;
 	font-size: 18px;
 	margin: 10px;
 	display: none;

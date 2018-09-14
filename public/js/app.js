@@ -18,6 +18,8 @@ var pending_index = [];
 var comfirmed_index = [];
 var sequencer_index = [];
 var IF_FIRST = false;
+var focus = false;
+var x,y;
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
@@ -50,14 +52,14 @@ function createCy(){
 					'border-color': '#1754c2',
 					// 'border-color': '#333',
 					// 'border-style': 'dotted',
-					'width': 20,
-					'height': 20
+					'width': 15,
+					'height': 15
 				}
             },
             {
 				selector: 'edge',
 				style: {
-					'width': 2,
+					'width': 1,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#7bc3d4',
 					'target-arrow-color': '#7bc3d4',
@@ -159,7 +161,7 @@ function createGraph(data){
 			// graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
 		})
 	}
-	console.log(graph);
+	//console.log(graph);
     dagre.layout(graph);
     return graph;
 }
@@ -196,9 +198,9 @@ function generate(data) {
 				delete phantoms[unit];
 			}
 			else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-400,400);
 				if (pos_iomc == 0 && _node.type == "comfirmed_unit") {
-					pos_iomc += 40;
+					pos_iomc += 20;
 				}
 				generateAdd.push({
 					group: "nodes",
@@ -245,7 +247,7 @@ function setNew(data, newUnits){
 			classes += _node.type;
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
-				newOffset_y = newOffset - (max - min) + 66;
+				newOffset_y = newOffset - (max - min) + 75;
 				newOffset -= (max - min) + 88;
 				first = true;
 				//console.log(newOffset_x,newOffset_y,newOffset);
@@ -263,7 +265,7 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+random(-500,600);
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 40;
 				}
@@ -491,10 +493,11 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
 		}, {
 			duration: 400
 		});
+	focus = false;
 }
 
 function randomNum(minNum,maxNum){ 
@@ -557,6 +560,7 @@ window.addEventListener('hashchange', function() {
 		showInfoMessage("Address not found")
 		$('#unit').html(location.hash.substr(1));
 		$('#listInfo').show();
+		focus = true;
 		//get unit info api
 		//highlightNode(location.hash.substr(1));
 		if ($('#addressInfo').css('display') == 'block') {
@@ -662,6 +666,9 @@ function read_random_tx(){
 	draw_edges(Data);
 	old_tip_index = new_tip_index;
 	new_tip_index = [];
+	if(!focus){
+		goToTop();
+	}
 }
 
 function draw_edges(Data){
