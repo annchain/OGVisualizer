@@ -19,8 +19,8 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-
-if (typeof url !== 'undefined') {
+//init websocket host
+if (typeof url == 'undefined') {
     url = config.websocket.host;
 }
 var ws = new WebSocket("ws://" + url);
