@@ -255,7 +255,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 88;
+				newOffset -= (max - min) + 25;
 				first = true;
 				//console.log(newOffset_x,newOffset_y,newOffset);
 				if (newUnits && cy.extent().y1 < oldOffset) {
@@ -272,7 +272,7 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-500,600);
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-630,630);
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 40;
 				}
@@ -500,7 +500,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-200}
 		}, {
 			duration: 400
 		});
@@ -561,18 +561,16 @@ function closeInfo() {
 //event
 
 window.addEventListener('hashchange', function() {
-	if (location.hash.length == 45 || location.hash.length == 33) {
-		console.log(location.hash.substr(1));
-		adaptiveShowInfo();
-		showInfoMessage("Address not found")
-		$('#unit').html(location.hash.substr(1));
-		$('#listInfo').show();
-		focus = true;
-		//get unit info api
-		//highlightNode(location.hash.substr(1));
-		if ($('#addressInfo').css('display') == 'block') {
-			$('#addressInfo').hide();
-		}
+	console.log(location.hash.substr(1));
+	adaptiveShowInfo();
+	showInfoMessage("Address not found")
+	$('#unit').html(location.hash.substr(1));
+	$('#listInfo').show();
+	focus = true;
+	//get unit info api
+	//highlightNode(location.hash.substr(1));
+	if ($('#addressInfo').css('display') == 'block') {
+		$('#addressInfo').hide();
 	}
 });
 
@@ -627,7 +625,7 @@ function read_new_Tx(){
 		}else{
 			setNew(JSON.parse(data.data),true);
             if(!focus){
-                goToTop();
+				goToTop();
             }
 		}
 	}
