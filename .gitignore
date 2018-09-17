@@ -3,6 +3,7 @@
 .bak
 *.bak
 .debora
+.project
 .revision
 .vagrant
 *.exe
