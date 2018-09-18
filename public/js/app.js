@@ -62,8 +62,8 @@ function createCy(){
 					'border-color': '#1754c2',
 					// 'border-color': '#333',
 					// 'border-style': 'dotted',
-					'width': 15,
-					'height': 15
+					'width': 10,
+					'height': 10
 				}
             },
             {
@@ -512,7 +512,7 @@ function goToTop() {
 		cy.animate({
 			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-200}
 		}, {
-			duration: 400
+			duration: 200
 		});
 	focus = false;
 }
