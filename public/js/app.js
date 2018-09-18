@@ -8,6 +8,7 @@ var generateOffset = 0;
 var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
+var oldSet;
 var zoomSet = 1.01;
 var timerInfoMessage;
 var tip_index = [];
@@ -19,12 +20,17 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
+var widht = document.body.clientWidth-600;
 //init websocket host
 if (typeof url == 'undefined') {
     url = config.websocket.host;
 }
 var ws = new WebSocket("ws://" + url);
 
+window.onresize = function(){
+	var widht = document.body.clientWidth-600;
+	console.log(widht);
+}
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
@@ -119,6 +125,7 @@ function createCy(){
 	});
     
     $(cy.container()).on('wheel mousewheel', function(e) {
+		focus = true;
 		var deltaY = e.originalEvent.wheelDeltaY || -e.originalEvent.deltaY;
 		if (page == 'dag') {
 			e.preventDefault();
@@ -203,9 +210,9 @@ function generate(data) {
 				delete phantoms[unit];
 			}
 			else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-400,400);
-				if (pos_iomc == 0 && _node.type == "comfirmed_unit") {
-					pos_iomc += 20;
+				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
+				if (pos_iomc == 0 || _node.type == "sequencer_unit") {
+					pos_iomc += 35;
 				}
 				generateAdd.push({
 					group: "nodes",
@@ -213,18 +220,14 @@ function generate(data) {
 					position: {x: pos_iomc, y: _node.y + newOffset_y},
 					classes: classes
 				});
-				console.log("pos_iomc",pos_iomc,_node.y + newOffset_y);
-
 			}
 		}
 	});
 	generateAdd = fixConflicts(generateAdd);
-	//generateAdd[2].position.x = -82-82;
-	// generateAdd[1].position.x = 0;
-	console.log(generateAdd);
 	cy.add(generateAdd);
-	generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
-	//console.log(generateOffset);
+	//generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
+	generateOffset = cy.nodes()[0].position().x;
+	console.log(cy.nodes()[cy.nodes().length - 1]._private.position.x,cy.nodes()[0].position().x)
 	nextPositionUpdates = generateOffset;
 	cy.add(createEdges());
 	updListNotStableUnit();
@@ -255,7 +258,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 25;
+				newOffset -= (max - min) + 25;//行间距
 				first = true;
 				//console.log(newOffset_x,newOffset_y,newOffset);
 				if (newUnits && cy.extent().y1 < oldOffset) {
@@ -263,6 +266,7 @@ function setNew(data, newUnits){
 				}
 			}
 			if (phantomsTop[unit] !== undefined) {
+				console.log('in here');
 				cy.remove(cy.getElementById(unit));
 				generateAdd.push({
 					group: "nodes",
@@ -272,19 +276,25 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x)+randomNum(-630,630);
+				pos_iomc = nextPositionUpdates + randomNum(-380,400);
+				while(Math.abs(pos_iomc-oldSet)<90){
+					pos_iomc = nextPositionUpdates + randomNum(-380,400);
+				}
+				console.log(pos_iomc);
+				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
-					pos_iomc += 40;
+					pos_iomc += 20;
 				}
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+random, y: _node.y + newOffset_y},
+					position: {x: pos_iomc, y: _node.y + newOffset_y},
 					//position: {x: pos_iomc+random, y: _node.y + newOffset_y},
 					classes: classes
 				});
 			}
 		}
+		old_y = _node.y + newOffset_y;
     });
 	generateAdd = fixConflicts(generateAdd);
 	//console.log(generateAdd);
@@ -410,10 +420,10 @@ function createEdges() {
 		if (_edges[k]) delete _edges[k];
 	}
 	for (k in phantoms) {
-		cy.getElementById(k).position('y', generateOffset + 166);
+		cy.getElementById(k).position('y', generateOffset + 25);
 	}
 	for (k in phantomsTop) {
-		cy.getElementById(k).position('y', newOffset - 166);
+		cy.getElementById(k).position('y', newOffset - 25);
 	}
 	for (k in _edges) {
 		if (_edges.hasOwnProperty(k)) {
@@ -428,7 +438,7 @@ function createEdges() {
 				out.push({
 					group: "nodes",
 					data: {id: _edges[k].target, unit_s: _edges[k].target.substr(0, 7) + '...'},
-					position: {x: position.x + offset, y: generateOffset + 166},
+					position: {x: position.x + offset, y: generateOffset + 25},
 					classes : 'sequencer_unit'//first unit classes
 				});
 				offset += 60;
@@ -440,7 +450,7 @@ function createEdges() {
 				out.push({
 					group: "nodes",
 					data: {id: _edges[k].source, unit_s: _edges[k].source.substr(0, 7) + '...'},
-					position: {x: position.x + offsetTop, y: newOffset - 166}
+					position: {x: position.x + offsetTop, y: newOffset - 25}
 				});
 				offsetTop += 60;
 				out.push({group: "edges", data: _edges[k], classes: classes});
@@ -614,7 +624,7 @@ function pause(){
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		console.log(JSON.parse(data.data));
+		//console.log(JSON.parse(data.data));
 		if(!IF_FIRST){
 			generate(JSON.parse(data.data));
 			IF_FIRST = true;
