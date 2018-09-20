@@ -280,7 +280,7 @@ function setNew(data, newUnits){
 				while(Math.abs(pos_iomc-oldSet)<90){
 					pos_iomc = nextPositionUpdates + randomNum(-380,400);
 				}
-				console.log(pos_iomc);
+				//console.log(pos_iomc);
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 20;
@@ -512,7 +512,7 @@ function goToTop() {
 		cy.animate({
 			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-200}
 		}, {
-			duration: 200
+			duration: 0
 		});
 	focus = false;
 }
@@ -544,7 +544,7 @@ function minus(){
 }
 
 function adaptiveShowInfo() {
-	$('#cy, #scroll, #goToTop').addClass('showInfoBlock');
+	$('#cy, #scroll, #goToTop, #plus, #minus, #annotation').addClass('showInfoBlock');
 	$('#info').removeClass('hideInfoBlock');
 }
 
@@ -565,7 +565,7 @@ function hideInfoMessage() {
 
 function closeInfo() {
 	$('#info').addClass('hideInfoBlock');
-	$('#cy, #scroll, #goToTop').removeClass('showInfoBlock');
+	$('#cy, #scroll, #goToTop, #plus, #minus, #annotation').removeClass('showInfoBlock');
 }
 
 //event
@@ -608,9 +608,6 @@ function start(){
 	ws.send(startMsg);
 	createCy();
 	read_new_Tx();
-	/*        gen new unit and show          */
-	//read_random_tx();
-	//setInterval("painting()",2000);
 }
 
 function pause(){
@@ -634,6 +631,8 @@ function read_new_Tx(){
 			page = 'dag';
 		}else{
 			setNew(JSON.parse(data.data),true);
+			tip_index.push(JSON.parse(data.data));
+			rm_old_Tx();
             if(!focus){
 				goToTop();
             }
@@ -667,15 +666,6 @@ function update_Tx(update, updateType){
     }else{
         console.log(`${updateType === 'Milestone' ? 'Milestone' : 'TX'} not found in local DB - Hash: ${txHash} | updateType: ${updateType}`);
     }
-    consoleTx();
-}
-
-function consoleTx(){
-    for(var i=0;i<tx_list.length;i++){
-        if(tx_list[i].confirmed){
-            console.log("@@@@@@@@@@@",tx_list[i])
-        }
-    }
 }
 
 function read_random_tx(){
@@ -689,12 +679,22 @@ function read_random_tx(){
 	}
 }
 
+function rm_old_Tx(){
+	console.log(tip_index.length);
+	if(tip_index.length>100){
+		console.log(tip_index);
+		var oldest_unit = tip_index[0].nodes[0].data.unit
+		console.log(oldest_unit);
+		console.log(cy.getElementById(oldest_unit));
+		cy.remove(cy.getElementById(oldest_unit));
+		tip_index.splice(0,1); 
+	}
+}
+
 function draw_edges(Data){
 	var data = {};
 			data.nodes = Data.nodes;
 			data.edges = [];
-	//console.log("new",new_tip_index);
-	//console.log("old",old_tip_index);
 	new_tip_index.forEach(function(res){
 		var source = res.data.unit;
 		for(var i=0;i<2;i++){
@@ -713,7 +713,6 @@ function draw_edges(Data){
 		var unit = res.data.unit;
 		updateClass_pending_unit(unit);
 		pending_index.push(res);
-		//console.log(pending_index);
 	})
 }
 

@@ -560,7 +560,7 @@ label {
 		right: 39px;
 	}
 
-	#cy.showInfoBlock, #scroll.showInfoBlock, #goToTop.showInfoBlock {
+	#cy.showInfoBlock, #scroll.showInfoBlock, #goToTop.showInfoBlock, #plus.showInfoBlock, #minus.showInfoBlock, #annotation.showInfoBlock {
 		display: none;
 	}
 
