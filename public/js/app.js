@@ -239,7 +239,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 100;//行间距
+				newOffset -= (max - min) + 20;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
@@ -251,7 +251,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+randomNum(-40,40), y: _node.y + newOffset_y+randomNum(-40,40)},
+					position: {x: phantomsTop[unit]+randomNum(-20,20), y: _node.y + newOffset_y+randomNum(-20,20)},
 					classes: classes
 				});
 				delete phantomsTop[unit];
@@ -267,7 +267,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+randomNum(-40,40), y: _node.y + newOffset_y+randomNum(-40,40)},
+					position: {x: pos_iomc+randomNum(-20,20), y: _node.y + newOffset_y+randomNum(-20,20)},
 					classes: classes
 				});
 			}
