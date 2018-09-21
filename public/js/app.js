@@ -36,6 +36,7 @@ var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
 
 initSocket();
+var t1 = window.setTimeout(start,1000);
 
 function createCy(){
      cy = cytoscape({
