@@ -598,7 +598,7 @@ function read_new_Tx(){
 			var newTX = JSON.parse(data.data)
 			setNew(newTX,true);
 			tip_index.push(newTX);
-			rm_old_Tx(newTX.length);
+			rm_old_Tx(newTX.nodes.length);
             if(!focus){
 				goToTop();
             }
@@ -646,6 +646,7 @@ function read_random_tx(){
 }
 
 function rm_old_Tx(length){
+	console.log(length);
 	console.log(tip_index.length);
 	if(tip_index.length>100){
 		console.log(tip_index);
