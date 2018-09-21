@@ -36,7 +36,6 @@ var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
 
 initSocket();
-var t1 = window.setTimeout(start,1000);
 
 function createCy(){
      cy = cytoscape({
@@ -60,8 +59,6 @@ function createCy(){
 					'background-color': '#fff',
 					'border-width': 2,
 					'border-color': '#1754c2',
-					// 'border-color': '#333',
-					// 'border-style': 'dotted',
 					'width': 10,
 					'height': 10
 				}
@@ -99,10 +96,6 @@ function createCy(){
 			},{
 				selector: '.is_on_main_chain',
 				style: {
-					//	'border-width': 4,
-					//	'border-style': 'solid',
-					//	'border-color': '#6495ed'
-					//	'border-color': '#333'
 					'background-color': '#6495ed'
 				}
 			}
@@ -157,22 +150,12 @@ function createGraph(data){
 			width: 32,
 			height: 32,
 			type: node.type,
-			// sequence: node.sequence
 		});
     });
-    // for (var k in data.edges) {
-	// 	if (data.edges.hasOwnProperty(k)) {
-	// 		graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
-	// 	}
-	// }
-	//console.log(data.edges);
 	if (data.edges){
 		data.edges.forEach(function(edge){
-			//console.log(edge);
-			// graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
 		})
 	}
-	//console.log(graph);
     dagre.layout(graph);
     return graph;
 }
@@ -225,7 +208,6 @@ function generate(data) {
 	});
 	generateAdd = fixConflicts(generateAdd);
 	cy.add(generateAdd);
-	//generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
 	generateOffset = cy.nodes()[0].position().x;
 	console.log(cy.nodes()[cy.nodes().length - 1]._private.position.x,cy.nodes()[0].position().x)
 	nextPositionUpdates = generateOffset;
@@ -238,7 +220,6 @@ function setNew(data, newUnits){
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
 		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {};
 	var graph = createGraph(data);
-	var random = randomNum(-80,30);
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
@@ -253,14 +234,12 @@ function setNew(data, newUnits){
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			//console.log(_node.type)
 			classes += _node.type;
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 25;//行间距
+				newOffset -= (max - min) + 100;//行间距
 				first = true;
-				//console.log(newOffset_x,newOffset_y,newOffset);
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
 				}
@@ -271,7 +250,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit], y: _node.y + newOffset_y},
+					position: {x: phantomsTop[unit], y: _node.y + newOffset_y+randomNum(-40,40)},
 					classes: classes
 				});
 				delete phantomsTop[unit];
@@ -280,7 +259,6 @@ function setNew(data, newUnits){
 				while(Math.abs(pos_iomc-oldSet)<90){
 					pos_iomc = nextPositionUpdates + randomNum(-380,400);
 				}
-				//console.log(pos_iomc);
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 20;
@@ -288,8 +266,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc, y: _node.y + newOffset_y},
-					//position: {x: pos_iomc+random, y: _node.y + newOffset_y},
+					position: {x: pos_iomc, y: _node.y + newOffset_y+randomNum(-40,40)},
 					classes: classes
 				});
 			}
@@ -297,7 +274,6 @@ function setNew(data, newUnits){
 		old_y = _node.y + newOffset_y;
     });
 	generateAdd = fixConflicts(generateAdd);
-	//console.log(generateAdd);
     cy.add(generateAdd);
 	cy.add(createEdges()); 
     updListNotStableUnit();
@@ -305,17 +281,11 @@ function setNew(data, newUnits){
 }
 //addClass
 function updateClass_sequencer_unit(unit){
-	// cy.$('#j')
-  	// 	.data('weight', '70')   // style update
-  	// 	.addClass('funny')      // style update AGAIN
-  	// 	.removeClass('serious') // style update YET AGAIN s
-	//console.log(cy.getElementById(unit));
 	//cy.getElementById(unit).removeClass('is_on_main_chain')
 	cy.getElementById(unit).addClass('sequencer_unit');
 }
 
 function updateClass_comfirmed_unit(unit){
-	//console.log(cy.getElementById(unit));
 	// cy.getElementById(unit).removeClass('is_on_main_chain')
 	cy.getElementById(unit).addClass('comfirmed_unit');
 }
@@ -386,9 +356,6 @@ function scrollUp() {
 		(notLastUnitUp === true && ext.y2 - (ext.h) > cy.getElementById(nodes[0].data.unit).position().y)
 	) {
 		cy.panBy({x: 0, y: 25});//scrollUp
-	}
-	else if (notLastUnitUp === true) {
-		//getPrev();
 	}
 }
 
@@ -512,7 +479,7 @@ function goToTop() {
 		cy.animate({
 			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-200}
 		}, {
-			duration: 0
+			duration: 500
 		});
 	focus = false;
 }
@@ -612,16 +579,13 @@ function start(){
 
 function pause(){
     console.log('in pause');
-    socket.on('disconnect',function(reasion){
-        console.log('##############');
-        console.log(reasion);
-        console.log('##############');
-    });
+    // socket.on('disconnect',function(reasion){
+    //     console.log(reasion);
+    // });
 }
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		//console.log(JSON.parse(data.data));
 		if(!IF_FIRST){
 			generate(JSON.parse(data.data));
 			IF_FIRST = true;
@@ -630,9 +594,10 @@ function read_new_Tx(){
 			cy.center(cy.nodes()[0]);
 			page = 'dag';
 		}else{
-			setNew(JSON.parse(data.data),true);
-			tip_index.push(JSON.parse(data.data));
-			rm_old_Tx();
+			var newTX = JSON.parse(data.data)
+			setNew(newTX,true);
+			tip_index.push(newTX);
+			rm_old_Tx(newTX.length);
             if(!focus){
 				goToTop();
             }
@@ -679,7 +644,7 @@ function read_random_tx(){
 	}
 }
 
-function rm_old_Tx(){
+function rm_old_Tx(length){
 	console.log(tip_index.length);
 	if(tip_index.length>100){
 		console.log(tip_index);
@@ -687,7 +652,7 @@ function rm_old_Tx(){
 		console.log(oldest_unit);
 		console.log(cy.getElementById(oldest_unit));
 		cy.remove(cy.getElementById(oldest_unit));
-		tip_index.splice(0,1); 
+		tip_index.splice(0,length); 
 	}
 }
 
