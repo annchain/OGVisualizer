@@ -250,7 +250,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit], y: _node.y + newOffset_y+randomNum(-40,40)},
+					position: {x: phantomsTop[unit]+randomNum(-40,40), y: _node.y + newOffset_y+randomNum(-40,40)},
 					classes: classes
 				});
 				delete phantomsTop[unit];
@@ -266,7 +266,7 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc, y: _node.y + newOffset_y+randomNum(-40,40)},
+					position: {x: pos_iomc+randomNum(-40,40), y: _node.y + newOffset_y+randomNum(-40,40)},
 					classes: classes
 				});
 			}
