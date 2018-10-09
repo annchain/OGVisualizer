@@ -123,6 +123,7 @@ menuAnnotation{
 	top: 45px;
 	bottom: 0;
 	z-index: 999;
+	/* transform:rotate(90deg); */
 }
 
 #info {
@@ -417,6 +418,19 @@ label {
 	top: 68px;
 	left: 32%;
 	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
+#labelSwitcher{
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background-size: 28px;
+	top: 835px;
+	left: 32.4%;
 	border-radius: 100%;
 	margin-left: 40px;
 }
