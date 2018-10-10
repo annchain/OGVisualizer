@@ -22,7 +22,7 @@ var focus = false;
 var x,y;
 var widht = document.body.clientWidth-600;
 var pxSize = 7;
-var labelSwitch = true;
+var labelSwitch = false;
 //init websocket host
 if (url.length == 0) {
     url = config.websocket.host;
@@ -39,6 +39,7 @@ $('#cy, #scroll, #goToTop').show();
 
 initSocket();
 var t1 = window.setTimeout(start,1000);
+var t2 = window.setInterval(edges_flash,200);
 
 function createCy(){
      cy = cytoscape({
@@ -69,17 +70,37 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 0.5,
+					'width': 0.75,
 					// 'target-arrow-shape': 'triangle',
-					'line-color': '#7bc3d4',
-					'target-arrow-color': '#7bc3d4',
+					'line-color': '#76d2ca',
+					'target-arrow-color': '#76d2ca',
+					'curve-style': 'bezier'
+				}
+			},{
+				selector: '.edge_flash',
+				style: {
+					'width': 1,
+					// 'target-arrow-shape': 'triangle',
+					'line-color': '#ff0600',
+					'target-arrow-color': '#ff0600',
 					'curve-style': 'bezier'
 				}
 			},{
 				selector: '.comfirmed_unit',
 				style: {
+					'shape':'rectangle',
 					'width-width': 2,
 					'border-color': '#3cb371',
+					'background-color': '#3cb371',
+					'width': pxSize+3,
+					'height': pxSize+3
+				}
+			},{
+				selector: '.comfirmed_unit_flash',
+				style: {
+					'shape':'rectangle',
+					'width-width': 1,
+					'border-color': '#ff0600',
 					'background-color': '#3cb371',
 					'width': pxSize+3,
 					'height': pxSize+3
@@ -94,6 +115,7 @@ function createCy(){
 			},{
 				selector: '.sequencer_unit',
 				style: {
+					'shape':'rectangle',
 					'border-width': 2,
 					'background-color': '#ff69b4',
 					'border-color': '#ff69b4',
@@ -224,8 +246,21 @@ function generate(data) {
 }
 
 function setNew(data, newUnits){
+	// console.log(data);
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
-		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {};
+		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {},target01,target02,target01_coord,target02_coord,setoff;
+	target01 = data.edges[0].target;
+	target02 = data.edges[1].target;
+	target01_coord = cy.getElementById(target01)._private.position;
+	target02_coord = cy.getElementById(target02)._private.position;
+	// console.log(target01_coord,target02_coord);
+	// console.log(typeof target01_coord);
+	// if (typeof target01_coord == "undefined" || typeof target02_coord == "undefined"){
+	// 	// console.log('here');
+	// 	setoff = 0 ;
+	// }else{
+	// 	setoff = countCoord(target01_coord,target02_coord);
+	// }
 	var graph = createGraph(data);
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
@@ -246,7 +281,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 16;//行间距
+				newOffset -= (max - min) + 21;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
@@ -258,23 +293,35 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+randomNum(-15,15), y: _node.y + newOffset_y+randomNum(-20,20)},
+					position: {x: phantomsTop[unit]+randomNum(-15,15), y: _node.y + newOffset_y+randomNum(-15,15)},
 					classes: classes
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-380,400);
+				pos_iomc = nextPositionUpdates + randomNum(-380,400)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-380,400);
+					pos_iomc = nextPositionUpdates + randomNum(-380,400)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 20;
 				}
+				// if (setoff!=0){
+				// 	var randomA = randomNum(0,1);
+				// 	if (randomA == 0){
+				// 		var XX = setoff.x;
+				// 		var YY = _node.y + newOffset_y;
+				// 	}else{
+				// 		var XX = pos_iomc+randomNum(-15,15);
+				// 		var YY = _node.y + newOffset_y+randomNum(-15,15);
+				// 	}
+				// }
+				var XX = pos_iomc+randomNum(-15,15);
+				var YY = _node.y + newOffset_y+randomNum(-15,15);
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+randomNum(-15,15), y: _node.y + newOffset_y+randomNum(-20,20)},
+					position: {x: XX, y: _node.y + YY},
 					classes: classes
 				});
 			}
@@ -293,6 +340,31 @@ function setNew(data, newUnits){
 	cy.add(createEdges()); 
     updListNotStableUnit();
 	updateScrollHeigth(); 
+	flash_tx_info(data.nodes[0].data.unit);
+}
+
+function countCoord(coord1,coord2){
+	var x,y;
+	var x1 = coord1.x;
+	var y1 = coord1.y;
+	var x2 = coord2.x;
+	var y2 = coord2.y;
+	var l = Math.abs(x1-x2);
+	var x3 = x1 - l;
+	var x4 = x2 + l;
+	// console.log(coord1,coord2);
+	if(y1<y2){
+		x = randomNum(x3,x4);
+		y = randomNum(y1,y1-Math.abs(y1-y2)/2);
+	}else{
+		x = randomNum(x3,x4);
+		y = randomNum(y2,y2-Math.abs(y1-y2)/2);
+	}
+	var result = {};
+	result.x = x;
+	result.y = y;
+	// console.log(result);
+	return result;
 }
 //addClass
 function updateClass_sequencer_unit(unit){
@@ -302,7 +374,11 @@ function updateClass_sequencer_unit(unit){
 
 function updateClass_comfirmed_unit(unit){
 	// cy.getElementById(unit).removeClass('is_on_main_chain')
-	cy.getElementById(unit).addClass('comfirmed_unit');
+	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
+	console.log(cy.getElementById(unit));
+	if(!cy.getElementById(unit)._private.classes.sequencer_unit){
+		cy.getElementById(unit).addClass('comfirmed_unit');
+	}
 }
 
 function updateClass_pending_unit(unit){
@@ -415,16 +491,16 @@ function createEdges() {
 				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 			else {
-				position = cy.getElementById(_edges[k].source).position();
-				phantoms[_edges[k].target] = position.x + offset;
-				out.push({
-					group: "nodes",
-					data: {id: _edges[k].target, unit_s: _edges[k].target.substr(0, 7) + '...'},
-					position: {x: position.x + offset, y: generateOffset + 25},
-					classes : 'sequencer_unit'//first unit classes
-				});
-				offset += 60;
-				out.push({group: "edges", data: _edges[k], classes: classes});
+				// position = cy.getElementById(_edges[k].source).position();
+				// phantoms[_edges[k].target] = position.x + offset;
+				// out.push({
+				// 	group: "nodes",
+				// 	data: {id: _edges[k].target, unit_s: _edges[k].target.substr(0, 7) + '...'},
+				// 	position: {x: position.x + offset, y: generateOffset + 25},
+				// 	classes : 'sequencer_unit'//first unit classes
+				// });
+				// offset += 60;
+				// out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 			if (!cy.getElementById(_edges[k].source).length) {
 				position = cy.getElementById(_edges[k].target).position();
@@ -512,7 +588,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-200}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-280}
 		}, {
 			duration: 500
 		});
@@ -637,6 +713,12 @@ function start(){
 	read_confirmed_Tx();
 }
 
+function edges_flash(){
+	edges.forEach(function(edge){
+		cy.getElementById(edge.id).flashClass('edge_flash',500);
+	})
+}
+
 function pause(){
     console.log('in pause');
     // socket.on('disconnect',function(reasion){
@@ -704,6 +786,21 @@ function update_Tx(update, updateType){
     }else{
         console.log(`${updateType === 'Milestone' ? 'Milestone' : 'TX'} not found in local DB - Hash: ${txHash} | updateType: ${updateType}`);
     }
+}
+
+function flash_tx_info(uint){
+	// console.log(location.hash.substr(1));
+	adaptiveShowInfo();
+	//showInfoMessage("Address not found")
+	$('#unit').html(uint);
+	$('#listInfo').show();
+	//focus = true;
+	//get unit info api
+	get_tx_info(uint);
+	//highlightNode(location.hash.substr(1));
+	if ($('#addressInfo').css('display') == 'block') {
+		$('#addressInfo').hide();
+	}
 }
 
 function read_random_tx(){
