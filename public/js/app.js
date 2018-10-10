@@ -60,9 +60,9 @@ function createCy(){
 					'text-halign': 'center',
 					'font-size': '13px',
 					'text-margin-y': '5px',
-					'background-color': '#fff',
+					'background-color': '#74fbfd',
 					'border-width': 2,
-					'border-color': '#1754c2',
+					'border-color': '#74fbfd',
 					'width': pxSize,
 					'height': pxSize
 				}
@@ -72,8 +72,8 @@ function createCy(){
 				style: {
 					'width': 0.75,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#76d2ca',
-					'target-arrow-color': '#76d2ca',
+					'line-color': '#753faa',
+					'target-arrow-color': '#753faa',
 					'curve-style': 'bezier'
 				}
 			},{
@@ -81,8 +81,8 @@ function createCy(){
 				style: {
 					'width': 1,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#ff0600',
-					'target-arrow-color': '#ff0600',
+					'line-color': '#42408f',
+					'target-arrow-color': '#42408f',
 					'curve-style': 'bezier'
 				}
 			},{
@@ -90,20 +90,20 @@ function createCy(){
 				style: {
 					'shape':'rectangle',
 					'width-width': 2,
-					'border-color': '#3cb371',
-					'background-color': '#3cb371',
-					'width': pxSize+3,
-					'height': pxSize+3
+					'border-color': '#75fb6b',
+					'background-color': '#75fb6b',
+					'width': pxSize+1,
+					'height': pxSize+1
 				}
 			},{
 				selector: '.comfirmed_unit_flash',
 				style: {
 					'shape':'rectangle',
 					'width-width': 1,
-					'border-color': '#ff0600',
-					'background-color': '#3cb371',
-					'width': pxSize+3,
-					'height': pxSize+3
+					'border-color': '#d64f5f',
+					'background-color': '#d64f5f',
+					'width': pxSize+1,
+					'height': pxSize+1
 				}
 			},{
 				selector: '.pending_unit',
@@ -117,10 +117,10 @@ function createCy(){
 				style: {
 					'shape':'rectangle',
 					'border-width': 2,
-					'background-color': '#ff69b4',
-					'border-color': '#ff69b4',
-					'width': pxSize+6,
-					'height': pxSize+6
+					'background-color': '#e6d95f',
+					'border-color': '#e6d95f',
+					'width': pxSize+3,
+					'height': pxSize+3
 				}
 			},{
 				selector: '.is_on_main_chain',
@@ -588,7 +588,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-280}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
 		}, {
 			duration: 500
 		});

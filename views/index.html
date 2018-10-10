@@ -38,7 +38,7 @@
     </div>
     <div id="infoMessage" onclick="hideInfoMessage()">InfoMessage</div>
     <div id="cy"></div>
-    <div id="annotation"></div>
+    <!-- <div id="annotation"></div> -->
     <div id="goToTop" onclick="goToTop()">
         <div id="titleGoToTop">Go to top</div>
     </div>
@@ -56,9 +56,9 @@
     </div>
     <div id="minus" onclick="minus()">
     </div>
-    <div id="scroll">
+    <!-- <div id="scroll">
         <div id="scrollBody">&nbsp;</div>
-    </div>
+    </div> -->
     <div id="info" class="hideInfoBlock">
         <div id="infoClose"><a href="javascript:" onclick="closeInfo()">Close</a></div>
         <!-- <div id="defaultInfo">Select unit on the right</div> -->
@@ -74,31 +74,31 @@
                 <div class="infoTitle" onclick="showHideBlock(event, 'From')">From
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="From"></div>
+            <div id="From" style="color: #868686"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'To')">To
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="To"></div>
+                <div id="To" style="color: #868686"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'Value')">Value
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Value"></div>
+                <div id="Value" style="color: #868686"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'Parents')">Parents
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Parents"></div>
+                <div id="Parents" style="color: #868686"></div>
             </div>
             <div>
                 <div class="infoTitle" id="divTitleMessage" onclick="showHideBlock(event, 'Signature')">Signature
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Signature"></div>
+                <div id="Signature" style="color: #868686"></div>
             </div>
             <!-- <div>
                 <div class="infoTitle hideTitle" id="witnessesTitle" onclick="showHideBlock(event, 'witnesses')">
@@ -111,7 +111,7 @@
                 <div class="infoTitle" onclick="showHideBlock(event, 'otherInfo')">Technical information
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="otherInfo">
+                <div id="otherInfo" style="color: #868686">
                     <div>AccountNonce: <span id="AccountNonce"></span></div>
                     <div>Height: <span id="Height"></span></div>
                     <div>MineNonce: <span id="MineNonce"></span></div>

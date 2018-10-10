@@ -12,8 +12,8 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	background-color: #76d2ca;
-	border-bottom: 1px solid #76d2ca;
+	background-color: #26202d;
+	border-bottom: 1px solid #26202d;
 }
 
 #menuInput {
@@ -66,7 +66,7 @@ body {
 }
 
 #menuLeftTitle a {
-	color: #000;
+	color: #cdcdcd;
 }
 
 #menuRight {
@@ -120,9 +120,10 @@ menuAnnotation{
 	position: absolute;
 	right: 0;
 	left: 32%;
-	top: 45px;
+	top: -245px;
 	bottom: 0;
 	z-index: 999;
+	background-color: #26202d;
 	transform:rotate(90deg);
 }
 
@@ -134,9 +135,11 @@ menuAnnotation{
 	width: 32%;
 	border-right: 1px solid #ccc;
 	overflow: auto;
+	background-color: #26202d;
 }
 
 #unitParent {
+	color: #868686;
 	padding-left: 5px;
 }
 
@@ -157,6 +160,7 @@ menuAnnotation{
 }
 
 #defaultInfo {
+	color: #868686;
 	text-align: center;
 	margin-top: 20px;
 	font-size: 18px;
@@ -175,7 +179,7 @@ menuAnnotation{
 	font-weight: bold;
 	padding: 5px;
 	cursor: pointer;
-	color: #333333;
+	color: #868686;
 }
 
 .infoTitle:hover {
@@ -200,7 +204,7 @@ menuAnnotation{
 }
 
 .infoTitle.hideTitle:hover {
-	color: #333333;
+	color: #868686;
 }
 
 #addressInfo .infoTitle {
@@ -241,7 +245,7 @@ menuAnnotation{
 	font-weight: bold;
 	margin-bottom: 7px;
 	cursor: pointer;
-	color: #333333;
+	color: #868686;
 }
 
 .inputsInfo, .inputInfo, .inputsInf {
