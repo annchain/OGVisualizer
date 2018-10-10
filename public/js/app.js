@@ -71,7 +71,7 @@ function createCy(){
 				selector: 'edge',
 				style: {
 					'width': 0.75,
-					// 'target-arrow-shape': 'triangle',
+					'target-arrow-shape': 'triangle',
 					'line-color': '#76d2ca',
 					'target-arrow-color': '#76d2ca',
 					'curve-style': 'bezier'
@@ -80,7 +80,7 @@ function createCy(){
 				selector: '.edge_flash',
 				style: {
 					'width': 1,
-					// 'target-arrow-shape': 'triangle',
+					'target-arrow-shape': 'triangle',
 					'line-color': '#ff0600',
 					'target-arrow-color': '#ff0600',
 					'curve-style': 'bezier'
@@ -375,7 +375,7 @@ function updateClass_sequencer_unit(unit){
 function updateClass_comfirmed_unit(unit){
 	// cy.getElementById(unit).removeClass('is_on_main_chain')
 	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
-	console.log(cy.getElementById(unit));
+	// console.log(cy.getElementById(unit));
 	if(!cy.getElementById(unit)._private.classes.sequencer_unit){
 		cy.getElementById(unit).addClass('comfirmed_unit');
 	}
