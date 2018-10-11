@@ -84,21 +84,26 @@ $(document).keyup(function () {
 
 
 function init() {
-    app = new PIXI.Application(800, 600, {antialias: true, autoResize: true});
-
-    app.renderer.view.style.position = "absolute";
-    app.renderer.view.style.display = "block";
-    app.renderer.view.style.width = window.innerWidth + "px";
-    app.renderer.view.style.height = (window.innerHeight - TOP_SPACE) + "px";
-
-    app.renderer.backgroundColor = 0xFFFFFF;
+    app = new PIXI.Application(800, 600, {antialias: true, autoResize: true, backgroundColor: 0xFFFFFF});
     app.view.id = "main";
     $("#paint").append(app.view);
-
     // app.ticker.add(delta => function(delta){
     //     draw();
     // }(delta));
 }
+
+function ensureSize() {
+    const parent = app.view.parentNode;
+    let my = Math.max(maxHeight, parent.clientHeight - TOP_SPACE);
+    app.renderer.resize(parent.clientWidth, my);
+}
+
+window.onresize = function (event) {
+    // console.log("window resized");
+    updateAllXY();
+    ensureSize();
+};
+
 
 function addWs(wsURL) {
     if (wssmap[wsURL] === undefined) {
@@ -119,10 +124,9 @@ function getXY(tx_index, ws_index) {
 }
 
 
-
-function updateTxForAllWs(txhash, txtype, tx, highlighting){
+function updateTxForAllWs(txhash, txtype, tx, highlighting) {
     let v = txsmap[txhash];
-    for (let wsi of v.wss){
+    for (let wsi of v.wss) {
         updateTx(txhash, txtype, wsi, tx, highlighting);
     }
 }
@@ -177,7 +181,7 @@ function updateTx(txhash, txtype, wsi, tx, highlighting) {
 
     square.click = function () {
         infoLock = ctrlIsPressed;
-        if (lastLocked != null){
+        if (lastLocked != null) {
             updateTxForAllWs(lastLocked.txv.hash, lastLocked.txv.type, lastLocked.tx, HIGHLIGHT_OFF);
             updateAncestorsHighlight(lastLocked.txv, HIGHLIGHT_OFF);
             lastLocked = null;
@@ -293,20 +297,6 @@ function updateAllXY() {
         }
     }
 }
-
-function ensureSize() {
-    let my = Math.max(maxHeight, window.innerHeight - TOP_SPACE);
-    app.view.height = my;
-    app.view.width = window.innerWidth;
-    app.renderer.resize(window.innerWidth, my);
-    // console.log("new viewport", app.view.height, app.view.width);
-}
-
-window.onresize = function (event) {
-    // console.log("window resized");
-    updateAllXY();
-    ensureSize();
-};
 
 
 // websocket part
