@@ -26,7 +26,7 @@ const lockedColor = HEXToVBColor("#660284");
 const sol_base = [
     HEXToVBColor("#000000"),    // SQUARE_TYPE_UNKNOWN
     HEXToVBColor("#b5d1ff"),    // SQUARE_TYPE_PENDING_TX
-    HEXToVBColor("#7aacff"),    // SQUARE_TYPE_CONFIRMED_TX
+    HEXToVBColor("#3b68ff"),    // SQUARE_TYPE_CONFIRMED_TX
     HEXToVBColor("#FF5C5C"),    // SQUARE_TYPE_SEQUENCER
     HEXToVBColor("#B20000"),    // SQUARE_TYPE_CONFIRMED_SEQUENCER
     HEXToVBColor("#2274A5"),    //
@@ -302,6 +302,7 @@ function updateAllXY() {
 // websocket part
 function connect(url) {
     let ws = new WebSocket(url);
+    ws.retryWait = 1000;
     ws.onopen = function () {
         started = true;
         // subscribe to some channels
@@ -353,10 +354,11 @@ function connect(url) {
             // never succeed. ignore it
             return;
         }
-        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        console.log('Socket is closed. Reconnect will be attempted in seconds.', e.reason, retryWait);
         setTimeout(function () {
             connect(url);
-        }, 1000);
+        }, retryWait);
+        ws.retryWait += 1000;
     };
 
     ws.onerror = function (err) {
