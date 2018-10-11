@@ -23,6 +23,7 @@ var x,y;
 var widht = document.body.clientWidth-600;
 var pxSize = 7;
 var labelSwitch = false;
+var last_uint;
 //init websocket host
 if (url.length == 0) {
     url = config.websocket.host;
@@ -60,9 +61,9 @@ function createCy(){
 					'text-halign': 'center',
 					'font-size': '13px',
 					'text-margin-y': '5px',
-					'background-color': '#74fbfd',
+					'background-color': '#00ffff',
 					'border-width': 2,
-					'border-color': '#74fbfd',
+					'border-color': '#00ffff',
 					'width': pxSize,
 					'height': pxSize
 				}
@@ -100,8 +101,8 @@ function createCy(){
 				style: {
 					'shape':'rectangle',
 					'width-width': 1,
-					'border-color': '#d64f5f',
-					'background-color': '#d64f5f',
+					'border-color': '#e6d95f',
+					'background-color': '#e6d95f',
 					'width': pxSize+1,
 					'height': pxSize+1
 				}
@@ -117,8 +118,8 @@ function createCy(){
 				style: {
 					'shape':'rectangle',
 					'border-width': 2,
-					'background-color': '#e6d95f',
-					'border-color': '#e6d95f',
+					'background-color': '#d64f5f',
+					'border-color': '#d64f5f',
 					'width': pxSize+3,
 					'height': pxSize+3
 				}
@@ -246,21 +247,12 @@ function generate(data) {
 }
 
 function setNew(data, newUnits){
-	// console.log(data);
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
 		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {},target01,target02,target01_coord,target02_coord,setoff;
 	target01 = data.edges[0].target;
 	target02 = data.edges[1].target;
 	target01_coord = cy.getElementById(target01)._private.position;
 	target02_coord = cy.getElementById(target02)._private.position;
-	// console.log(target01_coord,target02_coord);
-	// console.log(typeof target01_coord);
-	// if (typeof target01_coord == "undefined" || typeof target02_coord == "undefined"){
-	// 	// console.log('here');
-	// 	setoff = 0 ;
-	// }else{
-	// 	setoff = countCoord(target01_coord,target02_coord);
-	// }
 	var graph = createGraph(data);
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
@@ -298,24 +290,14 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-380,400)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-350,720)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-380,400)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-350,720)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 20;
 				}
-				// if (setoff!=0){
-				// 	var randomA = randomNum(0,1);
-				// 	if (randomA == 0){
-				// 		var XX = setoff.x;
-				// 		var YY = _node.y + newOffset_y;
-				// 	}else{
-				// 		var XX = pos_iomc+randomNum(-15,15);
-				// 		var YY = _node.y + newOffset_y+randomNum(-15,15);
-				// 	}
-				// }
 				var XX = pos_iomc+randomNum(-15,15);
 				var YY = _node.y + newOffset_y+randomNum(-15,15);
 				generateAdd.push({
@@ -329,60 +311,26 @@ function setNew(data, newUnits){
 		old_y = _node.y + newOffset_y;
     });
 	generateAdd = fixConflicts(generateAdd);
-	// console.log(generateAdd.length)
-	// for(var i=0;i<generateAdd.length;i++){
-	// 	cy.add(generateAdd[i]);
-	// 	cy.add(createEdges()); 
-    // 	updListNotStableUnit();
-	// 	updateScrollHeigth();
-	// }
     cy.add(generateAdd);
 	cy.add(createEdges()); 
     updListNotStableUnit();
 	updateScrollHeigth(); 
 	flash_tx_info(data.nodes[0].data.unit);
+	last_uint = data.nodes[0].data.unit;
 }
 
-function countCoord(coord1,coord2){
-	var x,y;
-	var x1 = coord1.x;
-	var y1 = coord1.y;
-	var x2 = coord2.x;
-	var y2 = coord2.y;
-	var l = Math.abs(x1-x2);
-	var x3 = x1 - l;
-	var x4 = x2 + l;
-	// console.log(coord1,coord2);
-	if(y1<y2){
-		x = randomNum(x3,x4);
-		y = randomNum(y1,y1-Math.abs(y1-y2)/2);
-	}else{
-		x = randomNum(x3,x4);
-		y = randomNum(y2,y2-Math.abs(y1-y2)/2);
-	}
-	var result = {};
-	result.x = x;
-	result.y = y;
-	// console.log(result);
-	return result;
-}
 //addClass
 function updateClass_sequencer_unit(unit){
-	//cy.getElementById(unit).removeClass('is_on_main_chain')
 	cy.getElementById(unit).addClass('sequencer_unit');
 }
 
 function updateClass_comfirmed_unit(unit){
-	// cy.getElementById(unit).removeClass('is_on_main_chain')
-	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
-	// console.log(cy.getElementById(unit));
 	if(!cy.getElementById(unit)._private.classes.sequencer_unit){
 		cy.getElementById(unit).addClass('comfirmed_unit');
 	}
 }
 
 function updateClass_pending_unit(unit){
-	//console.log(cy.getElementById(unit));
 	cy.getElementById(unit).addClass('pending_unit');
 }
 
@@ -590,7 +538,7 @@ function goToTop() {
 		cy.animate({
 			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
 		}, {
-			duration: 500
+			duration: 1500
 		});
 	focus = false;
 }
@@ -653,38 +601,19 @@ function closeInfo() {
 //event
 
 window.addEventListener('hashchange', function() {
-	// console.log(location.hash.substr(1));
 	adaptiveShowInfo();
-	//showInfoMessage("Address not found")
 	$('#unit').html(location.hash.substr(1));
 	$('#listInfo').show();
 	focus = true;
-	//get unit info api
 	get_tx_info(location.hash.substr(1));
-	//highlightNode(location.hash.substr(1));
 	if ($('#addressInfo').css('display') == 'block') {
 		$('#addressInfo').hide();
 	}
 });
 
-// 初始化 websocket
-
-// function initSocket(){
-//     socket.on('connect',function(){
-//         if(socket.connected){
-//             var websocketActive = true;
-//             console.log(`Successfully connected to Websocket.. [websocketActive: ${websocketActive}] ID:`,socket.id);
-//         }else{
-//             console.log('something worng..');
-//         }
-//     })
-// }
-
 function get_tx_info(uint){
 	var url_query = "http://localhost:8000/transaction?hash="+uint;
-	// console.log(url_query);
 	$.get(url_query,function(data){
-		// console.log(data);
 		var ParentsHash = data.ParentsHash.toString();
 		ParentsHash = ParentsHash.replace(/,/g,'<br>');
 		$('#From').html(data.From);
@@ -721,14 +650,10 @@ function edges_flash(){
 
 function pause(){
     console.log('in pause');
-    // socket.on('disconnect',function(reasion){
-    //     console.log(reasion);
-    // });
 }
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		// console.log(data);
 		data = JSON.parse(data.data)
 		if(data.type == "new_unit"){
 			if(!IF_FIRST){
@@ -746,9 +671,7 @@ function read_new_Tx(){
 				if(!focus) goToTop();  
 			}
 		}else if(data.type == "confirmed"){
-			// console.log(data);
 			data.nodes.forEach(function(node){
-				// console.log(node);
 				updateClass_comfirmed_unit(node.data.unit);
 			})
 		}
@@ -789,15 +712,10 @@ function update_Tx(update, updateType){
 }
 
 function flash_tx_info(uint){
-	// console.log(location.hash.substr(1));
 	adaptiveShowInfo();
-	//showInfoMessage("Address not found")
 	$('#unit').html(uint);
 	$('#listInfo').show();
-	//focus = true;
-	//get unit info api
 	get_tx_info(uint);
-	//highlightNode(location.hash.substr(1));
 	if ($('#addressInfo').css('display') == 'block') {
 		$('#addressInfo').hide();
 	}
@@ -815,16 +733,15 @@ function read_random_tx(){
 }
 
 function rm_old_Tx(length){
-	// console.log(length);
-	// console.log(tip_index.length);
-	if(tip_index.length>100){
-		// console.log(tip_index);
-		var oldest_unit = tip_index[0].nodes[0].data.unit
-		// console.log(oldest_unit);
-		// console.log(cy.getElementById(oldest_unit));
-		cy.remove(cy.getElementById(oldest_unit));
-		tip_index.splice(0,length); 
-	}
+	if(cy.nodes().length>500){
+		var current_crood = cy.getElementById(last_uint)._private.position
+		cy.nodes().forEach(function(node){
+			var node_crood = node._private.position;
+			if(node_crood.y>current_crood.y+5000){
+				cy.remove(cy.getElementById(node._private.data.id));
+			}
+		})
+	}	
 }
 
 function draw_edges(Data){
