@@ -6,8 +6,8 @@
 
     <title>Tx Matrix</title>
     <style>* {
-    padding: 0;
-    margin: 0
+        padding: 0;
+        margin: 0
     }</style>
     <link rel="stylesheet" href="bootstrap.css">
     <script src="jquery-3.3.1.js"></script>
@@ -22,24 +22,19 @@
 <body>
 <div class="container-fluid" id="bar">
     <div class="row">
-        <div class="col-6">
-            <form onsubmit="return false;">
-                <div class="row">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <textarea class="form-control col-10" id="wss" rows="2">ws://localhost:8002/ws
+        <div class="col-10">
+            <textarea class="form-control" id="wss" rows="2">ws://localhost:8002/ws
 ws://localhost:8102/ws</textarea>
-                            <div class="col-2">
-                                <button class="btn btn-primary" id="btnRefreshWs">Refresh</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
-        <div class="col" id="detail">
-            DETAIL
+        <div class="col-2">
+            <button class="btn btn-primary" id="btnRefreshWs">Refresh</button>
         </div>
+    </div>
+    <div class="row">
+        <div class="col" id="detail1">DETAIL</div>
+    </div>
+    <div class="row">
+        <div class="col" id="detail2">DETAIL</div>
     </div>
 </div>
 <div id="paint"></div>
