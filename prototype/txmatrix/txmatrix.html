@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tx Matrix</title>
+    <style>* {
+    padding: 0;
+    margin: 0
+    }</style>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="jquery-3.3.1.js"></script>
+    <style type="text/css">
+        .debug {
+            background: rgba(56, 78, 99, 0.4);
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" id="bar">
+    <div class="row">
+        <div class="col-6">
+            <form onsubmit="return false;">
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <textarea class="form-control col-10" id="wss" rows="2">ws://localhost:8002/ws
+ws://localhost:8102/ws</textarea>
+                            <div class="col-2">
+                                <button class="btn btn-primary" id="btnRefreshWs">Refresh</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col" id="detail">
+            DETAIL
+        </div>
+    </div>
+</div>
+<div id="paint"></div>
+
+
+</body>
+<script type="text/javascript" src="pixi.min.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnRefreshWs").click(function () {
+            let wsURLs = $("#wss").val().split('\n');
+            refreshWs(wsURLs);
+        });
+        let wsURLs = $("#wss").val().split('\n');
+        refreshWs(wsURLs);
+        // window.setInterval(sample, 500);
+    });
+</script>
+</html>
