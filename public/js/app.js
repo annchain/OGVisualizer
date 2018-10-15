@@ -326,6 +326,7 @@ function updateClass_sequencer_unit(unit){
 
 function updateClass_comfirmed_unit(unit){
 	if(!cy.getElementById(unit)._private.classes.sequencer_unit){
+		cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
 		cy.getElementById(unit).addClass('comfirmed_unit');
 	}
 }
