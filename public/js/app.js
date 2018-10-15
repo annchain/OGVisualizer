@@ -9,7 +9,7 @@ var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
 var oldSet;
-var zoomSet = 1.35;
+var zoomSet = 1.05;
 var timerInfoMessage;
 var tip_index = [];
 var new_tip_index = [];
@@ -536,7 +536,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-500}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-450}
 		}, {
 			duration: 1500
 		});
@@ -733,11 +733,11 @@ function read_random_tx(){
 }
 
 function rm_old_Tx(length){
-	if(cy.nodes().length>500){
+	if(cy.nodes().length>200){
 		var current_crood = cy.getElementById(last_uint)._private.position
 		cy.nodes().forEach(function(node){
 			var node_crood = node._private.position;
-			if(node_crood.y>current_crood.y+5000){
+			if(node_crood.y>current_crood.y+2000){
 				cy.remove(cy.getElementById(node._private.data.id));
 			}
 		})
@@ -751,7 +751,7 @@ function draw_edges(Data){
 	new_tip_index.forEach(function(res){
 		var source = res.data.unit;
 		for(var i=0;i<2;i++){
-			var target = old_tip_index[Math.floor(Math.random()*old_tip_index.length)].data.unit;
+			var target = old_tip_index[Math.floor(Math.random() * old_tip_index.length)].data.unit;
 			var id = gen_random_string(36);
 			var dataA = {
 				id :id,
