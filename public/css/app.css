@@ -157,11 +157,12 @@ menuAnnotation{
 
 #unitParent {
 	color: #868686;
-	padding-left: 5px;
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 }
 
 #unit {
+	padding-left: 10px;
 	color: #808080;
 }
 
@@ -190,32 +191,38 @@ menuAnnotation{
 }
 
 #From{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
 #To{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
 #Value{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
 #Parents{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
 #Signature{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
 #otherInfo{
-	font-size: 18px;
+	padding-left: 10px;
+	font-size: 22px;
 	color: #868686;
 }
 
