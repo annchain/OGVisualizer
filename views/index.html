@@ -12,16 +12,16 @@
         <div id="menuLeft">
             <a href="https://www.zhongan.io/" id="menuLeftImg"><img src="/img/logo.png"></a>
             <div id="menuLeftTitle"><a href="https://www.zhongan.io/">OG visualizer  {{ url }}</a></div>
-            <div id="menuRight">
+            <!-- <div id="menuRight">
                 <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/git.png"></a>
                 <a id="menuLeftImg" href="https://github.com/annchain/OG" ><img src="/img/re.png"></a>
                 <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/google.png"></a>
-                <!-- <a id="menuLeftImg" href="https://slack.com/" ><img src="/img/Slack_Mark.svg"></a>  -->
+                <a id="menuLeftImg" href="https://slack.com/" ><img src="/img/Slack_Mark.svg"></a> 
                 <a id="menuLeftImg" href="https://facebook.com/" ><img src="/img/face.png"></a>
                 <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/tw.png"></a>
                 <a id="menuLeftImg" href="https://twitter.com/" ><img src="/img/email.png"></a>
                 <a id="menuLeftImg" href="https://www.google.com" ><img src="/img/share.png"></a>
-            </div>
+            </div> -->
             <!-- <div id="menuInput" class="search bar7">
                 <form action="javascript:searchForm($('#inputSearch').val())" method="post">
                     <input type="text" id="inputSearch" placeholder="Search for unit or address">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div id="infoMessage" onclick="hideInfoMessage()">InfoMessage</div>
-    <div id="cy"></div>
+    <div class="cy-contain"><div id="cy"></div></div>
     <!-- <div id="annotation"></div> -->
     <div id="goToTop" onclick="goToTop()">
         <div id="titleGoToTop">Go to top</div>
@@ -68,31 +68,31 @@
                 <div class="infoTitle" onclick="showHideBlock(event, 'From')">From
                     <div class="infoTitleImg"></div>
                 </div>
-            <div id="From" style="color: #868686"></div>
+            <div id="From"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'To')">To
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="To" style="color: #868686"></div>
+                <div id="To"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'Value')">Value
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Value" style="color: #868686"></div>
+                <div id="Value"></div>
             </div>
             <div>
                 <div class="infoTitle" onclick="showHideBlock(event, 'Parents')">Parents
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Parents" style="color: #868686"></div>
+                <div id="Parents"></div>
             </div>
             <div>
                 <div class="infoTitle" id="divTitleMessage" onclick="showHideBlock(event, 'Signature')">Signature
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="Signature" style="color: #868686"></div>
+                <div id="Signature"></div>
             </div>
             <!-- <div>
                 <div class="infoTitle hideTitle" id="witnessesTitle" onclick="showHideBlock(event, 'witnesses')">
@@ -105,7 +105,7 @@
                 <div class="infoTitle" onclick="showHideBlock(event, 'otherInfo')">Technical information
                     <div class="infoTitleImg"></div>
                 </div>
-                <div id="otherInfo" style="color: #868686">
+                <div id="otherInfo">
                     <div>AccountNonce: <span id="AccountNonce"></span></div>
                     <div>Height: <span id="Height"></span></div>
                     <div>MineNonce: <span id="MineNonce"></span></div>

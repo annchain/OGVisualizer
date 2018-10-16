@@ -2,6 +2,8 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	margin: 0;
+	width: 1920px;
+	height: 1080px;
 	padding: 0;
 }
 
@@ -115,18 +117,29 @@ menuAnnotation{
 	cursor: pointer;
 	display: none;
 }
-
+.cy-contain {
+	position: absolute;
+	left: 32%;
+	top: -260px;
+	width: 68%;
+	height: calc(100% - 45px);
+	background-color: #02050e;
+	
+}
 #cy {
+	transform:rotate(90deg);
+	background-color: #02050e;
+}
+/* #cy {
 	position: absolute;
 	right: 0;
 	left: 32%;
 	top: -242px;
-	/* top: 45px; */
 	bottom: 0;
 	z-index: 999;
 	background-color: #02050e;
 	transform:rotate(90deg);
-}
+} */
 
 #info {
 	position: absolute;
@@ -142,6 +155,7 @@ menuAnnotation{
 #unitParent {
 	color: #868686;
 	padding-left: 5px;
+	font-size: 18px;
 }
 
 #unit {
@@ -164,12 +178,37 @@ menuAnnotation{
 	color: #868686;
 	text-align: center;
 	margin-top: 20px;
-	font-size: 18px;
+	font-size: 30px;
 }
 
 #listInfo {
 	display: none;
 	padding-left: 3px;
+}
+
+#From{
+	font-size: 18px;
+	color: #868686;
+}
+#To{
+	font-size: 18px;
+	color: #868686;
+}
+#Value{
+	font-size: 18px;
+	color: #868686;
+}
+#Parents{
+	font-size: 18px;
+	color: #868686;
+}
+#Signature{
+	font-size: 18px;
+	color: #868686;
+}
+#otherInfo{
+	font-size: 18px;
+	color: #868686;
 }
 
 #info > #listInfo > div {
@@ -181,6 +220,7 @@ menuAnnotation{
 	padding: 5px;
 	cursor: pointer;
 	color: #868686;
+	font-size: 18px;
 }
 
 .infoTitle:hover {

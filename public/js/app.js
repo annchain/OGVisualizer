@@ -9,7 +9,7 @@ var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
 var oldSet;
-var zoomSet = 1.05;
+var zoomSet = 0.75;
 var timerInfoMessage;
 var tip_index = [];
 var new_tip_index = [];
@@ -31,16 +31,25 @@ if (url.length == 0) {
 var ws = new WebSocket("ws://" + url);
 
 window.onresize = function(){
-	var widht = document.body.clientWidth-600;
-	console.log(widht);
+	var width = document.body.clientWidth;
+	var height = document.body.clientHeight;
+	let a = document.querySelector("#cy")
+	let b = (width * 0.68).toFixed(2) + 'px'
+	console.log((document.body.clientHeight - 45) + 'px', b)
+	a.style.height = b
+	a.style.width = (document.body.clientHeight - 45) + 'px'
+
 }
+
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
 
 initSocket();
-var t1 = window.setTimeout(start,1000);
-var t2 = window.setInterval(edges_flash,200);
+var t1 = window.setTimeout(window.onresize,1000);
+var t2 = window.setTimeout(start,1000);
+var t3 = window.setInterval(edges_flash,200);
+
 
 function createCy(){
      cy = cytoscape({
@@ -290,9 +299,9 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-350,720)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-500,720)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-350,720)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-500,720)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
