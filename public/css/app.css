@@ -120,13 +120,16 @@ menuAnnotation{
 .cy-contain {
 	position: absolute;
 	left: 32%;
-	top: -260px;
+	top: 45px;
 	width: 68%;
 	height: calc(100% - 45px);
 	background-color: #02050e;
 	
 }
 #cy {
+	position: absolute;
+	top: -20%;
+	left: 10%;
 	transform:rotate(90deg);
 	background-color: #02050e;
 }
@@ -465,7 +468,7 @@ label {
 	cursor: pointer;
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
-	top: 68px;
+	top: 10%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -523,7 +526,7 @@ label {
 	cursor: pointer;
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
-	top: 750px;
+	top: 80%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -538,7 +541,7 @@ label {
 	cursor: pointer;
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
-	top: 800px;
+	top: 85%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;

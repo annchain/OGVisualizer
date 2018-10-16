@@ -641,12 +641,12 @@ function get_tx_info(uint){
 function initSocket(){
 	ws.onopen = function(){  
 		console.log('socket open');
+		var startMsg = "{\"event\":\"new_unit\"}";
+		ws.send(startMsg);
 	};	
 }
 
 function start(){
-	var startMsg = "{\"event\":\"new_unit\"}";
-	ws.send(startMsg);
 	createCy();
 	read_new_Tx();
 	read_confirmed_Tx();
