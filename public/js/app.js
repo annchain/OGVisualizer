@@ -622,7 +622,8 @@ window.addEventListener('hashchange', function() {
 });
 
 function get_tx_info(uint){
-	var url_query = "http://localhost:8000/transaction?hash="+uint;
+	// var url_query = "http://localhost:8000/transaction?hash="+uint;
+	var url_query = "http://10.253.169.129:8000/transaction?hash="+uint;
 	$.get(url_query,function(data){
 		var ParentsHash = data.ParentsHash.toString();
 		ParentsHash = ParentsHash.replace(/,/g,'<br>');
