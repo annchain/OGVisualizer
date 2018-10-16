@@ -12,8 +12,8 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	background-color: #26202d;
-	border-bottom: 1px solid #26202d;
+	background-color: #02050e;
+	border-bottom: 1px solid #02050e;
 }
 
 #menuInput {
@@ -120,10 +120,11 @@ menuAnnotation{
 	position: absolute;
 	right: 0;
 	left: 32%;
-	top: -241px;
+	top: -242px;
+	/* top: 45px; */
 	bottom: 0;
 	z-index: 999;
-	background-color: #26202d;
+	background-color: #02050e;
 	transform:rotate(90deg);
 }
 
@@ -135,7 +136,7 @@ menuAnnotation{
 	width: 32%;
 	border-right: 1px solid #ccc;
 	overflow: auto;
-	background-color: #26202d;
+	background-color: #02050e;
 }
 
 #unitParent {
