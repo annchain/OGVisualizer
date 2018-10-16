@@ -147,7 +147,7 @@ menuAnnotation{
 	top: 45px;
 	bottom: 0;
 	width: 32%;
-	border-right: 1px solid #ccc;
+	/* border-right: 1px solid #ccc; */
 	overflow: auto;
 	background-color: #02050e;
 }
@@ -190,22 +190,27 @@ menuAnnotation{
 	font-size: 18px;
 	color: #868686;
 }
+
 #To{
 	font-size: 18px;
 	color: #868686;
 }
+
 #Value{
 	font-size: 18px;
 	color: #868686;
 }
+
 #Parents{
 	font-size: 18px;
 	color: #868686;
 }
+
 #Signature{
 	font-size: 18px;
 	color: #868686;
 }
+
 #otherInfo{
 	font-size: 18px;
 	color: #868686;

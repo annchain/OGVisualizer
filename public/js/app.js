@@ -21,7 +21,7 @@ var IF_FIRST = false;
 var focus = false;
 var x,y;
 var widht = document.body.clientWidth-600;
-var pxSize = 7;
+var pxSize = 10;
 var labelSwitch = false;
 var last_uint;
 //init websocket host
@@ -33,12 +33,11 @@ var ws = new WebSocket("ws://" + url);
 window.onresize = function(){
 	var width = document.body.clientWidth;
 	var height = document.body.clientHeight;
-	let a = document.querySelector("#cy")
-	let b = (width * 0.68).toFixed(2) + 'px'
-	console.log((document.body.clientHeight - 45) + 'px', b)
-	a.style.height = b
-	a.style.width = (document.body.clientHeight - 45) + 'px'
-
+	let a = document.querySelector("#cy");
+	let b = (width * 0.68).toFixed(2) + 'px';
+	console.log((document.body.clientHeight - 45) + 'px', b);
+	a.style.height = b;
+	a.style.width = (document.body.clientHeight - 45) + 'px';
 }
 
 var scroll = $('#scroll');
@@ -80,7 +79,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 0.75,
+					'width': 1.25,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
