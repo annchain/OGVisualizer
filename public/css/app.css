@@ -54,17 +54,17 @@ body {
 
 #menuLeftImg {
 	float: left;
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 #menuLeftImg > img {
-	width: 32px;
+	width: 42px;
 }
 
 #menuLeftTitle {
 	float: left;
 	padding: 5px 5px 10px 10px;
-	font-size: 17px;
+	font-size: 22px;
 }
 
 #menuLeftTitle a {
