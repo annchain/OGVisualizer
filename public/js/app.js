@@ -297,9 +297,9 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-700,600)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-700,600)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
