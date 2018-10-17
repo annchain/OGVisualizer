@@ -20,7 +20,7 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 15;
+var pxSize = 30;
 var labelSwitch = false;
 var last_uint;
 //init websocket host
@@ -78,7 +78,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 3,
+					'width': 6,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
@@ -651,6 +651,7 @@ function reconnect (){
 		console.log('socket open');
 		var startMsg = "{\"event\":\"new_unit\"}";
 		ws.send(startMsg);
+		read_new_Tx();
 		read_confirmed_Tx();
 	};
 	ws.onclose = disConnect;
