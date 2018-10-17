@@ -121,7 +121,7 @@ menuAnnotation{
 .cy-contain {
 	position: absolute;
 	left: 32%;
-	top: 45px;
+	top: 120px;
 	width: 68%;
 	height: calc(100% - 45px);
 	background-color:transparent;;
