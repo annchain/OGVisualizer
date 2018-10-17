@@ -124,8 +124,7 @@ menuAnnotation{
 	top: 120px;
 	width: 68%;
 	height: calc(100% - 45px);
-	background-color:transparent;;
-	
+	background-color:transparent;
 }
 #cy {
 	position: absolute;
