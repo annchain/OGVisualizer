@@ -129,7 +129,7 @@ menuAnnotation{
 #cy {
 	position: absolute;
 	top: -20%;
-	left: 12%;
+	left: 11%;
 	transform:rotate(90deg);
 	background-color: transparent;
 }
@@ -163,7 +163,7 @@ menuAnnotation{
 
 #unit {
 	padding-left: 10px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #infoClose, #addressClose {
@@ -193,37 +193,37 @@ menuAnnotation{
 #From{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #To{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #Value{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #Parents{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #Signature{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #otherInfo{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #06ecff;
+	color: #10a0de;
 }
 
 #info > #listInfo > div {
