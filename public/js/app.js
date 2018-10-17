@@ -640,13 +640,13 @@ function initSocket(){
 		console.log('socket open');
 		var startMsg = "{\"event\":\"new_unit\"}";
 		ws.send(startMsg);
+		read_confirmed_Tx();
 	};	
 }
 
 function start(){
 	createCy();
 	read_new_Tx();
-	read_confirmed_Tx();
 }
 
 function edges_flash(){
