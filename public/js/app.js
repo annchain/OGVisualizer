@@ -744,7 +744,7 @@ function rm_old_Tx(length){
 		var current_crood = cy.getElementById(last_uint)._private.position
 		cy.nodes().forEach(function(node){
 			var node_crood = node._private.position;
-			if(node_crood.y>current_crood.y+2000){
+			if(node_crood.y>current_crood.y+1500){
 				cy.remove(cy.getElementById(node._private.data.id));
 			}
 		})
