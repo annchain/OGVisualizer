@@ -642,8 +642,29 @@ function initSocket(){
 		var startMsg = "{\"event\":\"new_unit\"}";
 		ws.send(startMsg);
 		read_confirmed_Tx();
-	};	
+	};
 }
+
+function reconnect (){
+	ws = new WebSocket("ws://" + url);
+	ws.onopen = function(){  
+		console.log('socket open');
+		var startMsg = "{\"event\":\"new_unit\"}";
+		ws.send(startMsg);
+		read_confirmed_Tx();
+	};
+	ws.onclose = disConnect;
+	console.log(ws,'ws has reconnect');
+}
+
+var disConnect = function(){
+	console.log('now ws is disconnected.');
+    setTimeout(function(){
+         reconnect();
+    },500);
+}
+
+ws.onclose = disConnect;
 
 function start(){
 	createCy();
