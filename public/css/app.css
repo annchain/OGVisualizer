@@ -14,7 +14,7 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	background-color: #02050e;
+	background-color:transparent;
 	border-bottom: 1px solid #02050e;
 }
 
@@ -68,7 +68,7 @@ body {
 }
 
 #menuLeftTitle a {
-	color: #cdcdcd;
+	color: #fff;
 }
 
 #menuRight {
@@ -123,7 +123,7 @@ menuAnnotation{
 	top: 45px;
 	width: 68%;
 	height: calc(100% - 45px);
-	background-color: #02050e;
+	background-color:transparent;;
 	
 }
 #cy {
@@ -131,7 +131,7 @@ menuAnnotation{
 	top: -20%;
 	left: 10%;
 	transform:rotate(90deg);
-	background-color: #02050e;
+	background-color: transparent;
 }
 /* #cy {
 	position: absolute;
@@ -152,18 +152,18 @@ menuAnnotation{
 	width: 32%;
 	/* border-right: 1px solid #ccc; */
 	overflow: auto;
-	background-color: #02050e;
+	background-color:transparent;
 }
 
 #unitParent {
-	color: #868686;
+	color: #fff ;
 	padding-left: 10px;
 	font-size: 22px;
 }
 
 #unit {
 	padding-left: 10px;
-	color: #808080;
+	color: #06ecff;
 }
 
 #infoClose, #addressClose {
@@ -179,7 +179,7 @@ menuAnnotation{
 }
 
 #defaultInfo {
-	color: #868686;
+	color: #fff;
 	text-align: center;
 	margin-top: 20px;
 	font-size: 25px;
@@ -193,37 +193,37 @@ menuAnnotation{
 #From{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #To{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #Value{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #Parents{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #Signature{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #otherInfo{
 	padding-left: 10px;
 	font-size: 22px;
-	color: #868686;
+	color: #06ecff;
 }
 
 #info > #listInfo > div {
@@ -234,16 +234,16 @@ menuAnnotation{
 	font-weight: bold;
 	padding: 5px;
 	cursor: pointer;
-	color: #868686;
+	color: #fff;
 	font-size: 18px;
 }
 
 .infoTitle:hover {
-	color: #868686;
+	color: #fff;
 }
 
 .infoTitle.hideTitle {
-	color: #868686;
+	color: #fff;
 }
 
 .infoTitle > .infoTitleImg {
