@@ -475,7 +475,7 @@ label {
 	cursor: pointer;
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
-	top: 10%;
+	top: 8%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -533,7 +533,7 @@ label {
 	cursor: pointer;
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
-	top: 80%;
+	top: 75%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -548,7 +548,7 @@ label {
 	cursor: pointer;
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
-	top: 85%;
+	top: 80%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
