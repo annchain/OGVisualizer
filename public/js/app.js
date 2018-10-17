@@ -46,7 +46,7 @@ $('#cy, #scroll, #goToTop').show();
 initSocket();
 var t1 = window.setTimeout(window.onresize,1000);
 var t2 = window.setTimeout(start,1000);
-var t3 = window.setInterval(edges_flash,200);
+// var t3 = window.setInterval(edges_flash,200);
 
 
 function createCy(){
@@ -651,7 +651,7 @@ function start(){
 
 function edges_flash(){
 	edges && edges.forEach(function(edge){
-		cy.getElementById(edge.id).flashClass('edge_flash',500);
+		// cy.getElementById(edge.id).flashClass('edge_flash',500);
 	})
 }
 
