@@ -78,7 +78,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 2,
+					'width': 3,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
