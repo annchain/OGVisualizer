@@ -165,6 +165,7 @@ menuAnnotation{
 #unit {
 	padding-left: 10px;
 	color: #10a0de;
+    word-break:break-all;
 }
 
 #infoClose, #addressClose {
@@ -213,12 +214,14 @@ menuAnnotation{
 	padding-left: 10px;
 	font-size: 22px;
 	color: #10a0de;
+    word-break:break-all;
 }
 
 #Signature{
 	padding-left: 10px;
 	font-size: 22px;
 	color: #10a0de;
+    word-break:break-all;
 }
 
 #otherInfo{
