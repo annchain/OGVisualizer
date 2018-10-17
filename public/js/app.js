@@ -256,10 +256,10 @@ function generate(data) {
 function setNew(data, newUnits){
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
 		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {},target01,target02,target01_coord,target02_coord,setoff;
-	target01 = data.edges[0].target;
-	target02 = data.edges[1].target;
-	target01_coord = cy.getElementById(target01)._private.position;
-	target02_coord = cy.getElementById(target02)._private.position;
+	// target01 = data.edges[0].target;
+	// target02 = data.edges[1].target;
+	// target01_coord = cy.getElementById(target01)._private.position;
+	// target02_coord = cy.getElementById(target02)._private.position;
 	var graph = createGraph(data);
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
@@ -332,10 +332,8 @@ function updateClass_sequencer_unit(unit){
 }
 
 function updateClass_comfirmed_unit(unit){
-	if(!cy.getElementById(unit)._private.classes.sequencer_unit){
-		cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
-		cy.getElementById(unit).addClass('comfirmed_unit');
-	}
+	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
+	cy.getElementById(unit).addClass('comfirmed_unit');
 }
 
 function updateClass_pending_unit(unit){
@@ -652,7 +650,7 @@ function start(){
 }
 
 function edges_flash(){
-	edges.forEach(function(edge){
+	edges && edges.forEach(function(edge){
 		cy.getElementById(edge.id).flashClass('edge_flash',500);
 	})
 }
