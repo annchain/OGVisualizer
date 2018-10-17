@@ -542,7 +542,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-350}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-300}
 		}, {
 			duration: 1500
 		});
