@@ -20,7 +20,7 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 10;
+var pxSize = 15;
 var labelSwitch = false;
 var last_uint;
 //init websocket host
@@ -78,7 +78,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 1.25,
+					'width': 2,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
