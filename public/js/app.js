@@ -20,7 +20,7 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 30;
+var pxSize = 25;
 var labelSwitch = false;
 var last_uint;
 //init websocket host
@@ -78,7 +78,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 6,
+					'width': 5,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
@@ -280,7 +280,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 25;//行间距
+				newOffset -= (max - min) + 32;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
