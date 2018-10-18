@@ -14,8 +14,8 @@ var config = {
     },
     "websocket":{
         // "host":"localhost:8002/ws"
-        // "host":"10.253.169.129:8002/ws"
-        "host":"latifrons.cf:8002/ws"
+        "host":"10.253.169.129:8002/ws"
+        //"host":"latifrons.cf:8002/ws"
         //"host":"https://tanglemonitor.com:4434"
     }
 }
