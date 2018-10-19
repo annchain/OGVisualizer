@@ -6,10 +6,11 @@ let started = false;
 let infoLock = false;
 let ctrlIsPressed = false;
 let lastLocked = null;
+let autoScroll = true;
 
-const BLOCK_SIZE = 30;
+const BLOCK_SIZE = 20;
 const PADDING = 2;
-const LINE_SPACING = 15;
+const LINE_SPACING = 4;
 const TOP_SPACE = 65;
 const HIGHLIGHT_BORDER_WIDTH = 2;
 
@@ -32,8 +33,6 @@ const sol_base = [
     HEXToVBColor("#2274A5"),    //
     HEXToVBColor("#FFBF00"),
     HEXToVBColor("#DBFF33"),
-
-
 ];
 
 const SQUARE_TYPE_UNKNOWN = 0;
@@ -49,26 +48,32 @@ const HIGHLIGHT_LOCKED = 3;
 
 let globalTx = 0;
 
-// Tx list and set
-let txs = [];
-let txsmap = {};    // tx hash -> Tx
+let hashes = [];
+let hashIndexmap = {};
 
 // Ws list and set(with indices)
 let wss = [];
 let wssmap = {};    // ws url -> ws index in wss
 
-let edges = {};      // child -> parents
 let maxHeight = 0;
 
+class Ws {
+    constructor(url) {
+        this.url = url;
+        this.txs = [];
+        this.hashTxMap = {};
+        // child -> parents
+        this.edgeMap = {};
+        this.index = null;
+    }
+}
 
 class Tx {
     constructor(hash, type, index) {
         this.hash = hash;
         this.type = type;
-        // indices of Ws in wss
-        this.wss = [];
         this.index = index;
-        this.squares = [];
+        this.square = null;
     }
 }
 
@@ -105,10 +110,11 @@ window.onresize = function (event) {
 };
 
 
-function addWs(wsURL) {
-    if (wssmap[wsURL] === undefined) {
-        wssmap[wsURL] = wss.length;
-        wss.push(wsURL);
+function addWs(ws) {
+    if (wssmap[ws.url] === undefined) {
+        wssmap[ws.url] = wss.length;
+        ws.index = wss.length;
+        wss.push(ws);
     }
 }
 
@@ -125,40 +131,50 @@ function getXY(tx_index, ws_index) {
 
 
 function updateTxForAllWs(txhash, txtype, tx, highlighting) {
-    let v = txsmap[txhash];
-    for (let wsi of v.wss) {
-        updateTx(txhash, txtype, wsi, tx, highlighting);
+    for (let ws in wss) {
+        updateTx(txhash, txtype, ws, highlighting);
     }
 }
 
 /**
  *
- * @param txhash
- * @param txtype
- * @param wsi
  * @param tx json object
+ * @param txtype
+ * @param wsObject
  * @param highlighting 0 don't change (default 1), 1 no, 2 yes
  */
-function updateTx(txhash, txtype, wsi, tx, highlighting) {
-    if (txsmap[txhash] === undefined) {
-        let v = new Tx(txhash, txtype, txs.length);
-        txsmap[txhash] = v;
-        txs.push(v);
+function updateTx(txhash, txtype, wsObject, highlighting, raw) {
+
+    let index = 0;
+    if (hashIndexmap[txhash] === undefined) {
+        // totally new tx
+        hashIndexmap[txhash] = hashes.length;
+        index = hashes.length;
+        hashes.push(txhash);
+    } else {
+        index = hashIndexmap[txhash];
     }
-    let v = txsmap[txhash];
+
+    if (wsObject.hashTxMap[txhash] === undefined) {
+        let v = new Tx(txhash, txtype, index);
+        wsObject.hashTxMap[txhash] = v;
+        wsObject.txs.push(v);
+    }
+
+    let v = wsObject.hashTxMap[txhash];
     v.type = txtype;
 
     let square;
     let highlightStatus = 1;
-    let pos = v.wss.indexOf(wsi);
-    if (pos !== -1) {
-        square = v.squares[pos];
-        highlightStatus = square.highlighting;
-        v.squares.splice(pos, 1);
-        app.stage.removeChild(square);
-    } else {
-        v.wss.push(wsi);
+    let raws = raw;
+
+    if (v.square !== null) {
+        highlightStatus = v.square.highlighting;
+        raws = v.square.raw;
+        app.stage.removeChild(v.square);
+        v.square = null;
     }
+
     let highlightingValue;
 
     switch (highlighting) {
@@ -170,51 +186,58 @@ function updateTx(txhash, txtype, wsi, tx, highlighting) {
     }
 
     square = getSquare(txtype, highlighting);
-    square.txi = v.index;
-    square.wsi = wsi;
+    square.tx = v;
+    square.ws = wsObject;
     square.interactive = true;
     square.buttonMode = true;
-    square.tx = tx;
-    square.txv = v;
+    square.raw = raws;
     square.highlighting = highlightingValue;
 
 
     square.click = function () {
         infoLock = ctrlIsPressed;
         if (lastLocked != null) {
-            updateTxForAllWs(lastLocked.txv.hash, lastLocked.txv.type, lastLocked.tx, HIGHLIGHT_OFF);
-            updateAncestorsHighlight(lastLocked.txv, HIGHLIGHT_OFF);
+            updateTxForAllWs(lastLocked.tx.hash, lastLocked.tx.type, lastLocked.tx, HIGHLIGHT_OFF);
+            updateAncestorsHighlightAllWs(lastLocked.tx, HIGHLIGHT_OFF);
             lastLocked = null;
         }
 
         if (infoLock) {
             lastLocked = square;
-            updateTxForAllWs(lastLocked.txv.hash, lastLocked.txv.type, lastLocked.tx, HIGHLIGHT_LOCKED);
-            updateAncestorsHighlight(lastLocked.txv, HIGHLIGHT_ON);
+            updateTxForAllWs(lastLocked.tx.hash, lastLocked.tx.type, lastLocked.tx, HIGHLIGHT_LOCKED);
+            updateAncestorsHighlightAllWs(lastLocked.tx, HIGHLIGHT_ON);
         }
 
-        $("#detail1").text(JSON.stringify(square.tx));
-        $("#detail2").text(JSON.stringify(square.tx));
+        $("#detail1").text(JSON.stringify(square.raw));
+        $("#detail2").text(JSON.stringify(square.raw));
     };
     square.mouseover = function () {
         if (!infoLock) {
-            $("#detail1").text(JSON.stringify(square.tx));
-            updateAncestorsHighlight(square.txv, HIGHLIGHT_ON);
+            $("#detail1").text(JSON.stringify(square.raw));
+            updateAncestorsHighlightAllWs(square.tx, HIGHLIGHT_ON);
         }
-        $("#detail2").text(JSON.stringify(square.tx));
+        $("#detail2").text(JSON.stringify(square.raw));
     };
     square.mouseout = function () {
         if (!infoLock) {
-            updateAncestorsHighlight(square.txv, HIGHLIGHT_OFF);
+            updateAncestorsHighlightAllWs(square.tx, HIGHLIGHT_OFF);
         }
     };
 
-    let xy = getXY(v.index, wsi);
+    let xy = getXY(v.index, wsObject.index);
     square.x = xy[0];
     square.y = xy[1];
     ensureSize();
-    v.squares.splice(v.wss.indexOf(wsi), 0, square);
+    v.square = square;
     app.stage.addChild(square);
+
+    if (hashes.length > 5000) {
+        resetGraph();
+    }
+
+    if (autoScroll) {
+        scrollSmoothToBottom('paint')
+    }
 }
 
 function getSquare(type, highlighting) {
@@ -261,39 +284,42 @@ function sample() {
     globalTx += 1;
 }
 
-
 init();
 
-function refreshWs(wsURLs) {
+function resetGraph() {
     globalTx = 0;
-// Tx list and set
-    txs = [];
-    txsmap = {};
-// Ws list and set(with indices)
-    wss = [];
-    wssmap = {};
+    hashes = [];
+    hashIndexmap = {};
+
     maxHeight = 0;
 
     while (app.stage.children[0]) {
         app.stage.removeChild(app.stage.children[0]);
     }
+}
+
+function refreshWs(wsURLs) {
+    resetGraph();
+
+    wss = [];
+    wssmap = {};
 
     // connect all wss
     for (let wsi = wsURLs.length - 1; wsi >= 0; wsi--) {
         let url = wsURLs[wsi];
         connect(url);
     }
+    wss.sort()
 }
 
 function updateAllXY() {
     maxHeight = 0;
-    for (let i = txs.length - 1; i >= 0; i--) {
-        let tx = txs[i];
-        for (let j = tx.squares.length - 1; j >= 0; j--) {
-            let square = tx.squares[j];
-            let xy = getXY(square.txi, square.wsi);
-            square.x = xy[0];
-            square.y = xy[1];
+
+    for (let wsObject of wss) {
+        for (let tx of wsObject.txs) {
+            let xy = getXY(hashIndexmap[tx.hash], wsObject.index);
+            tx.square.x = xy[0];
+            tx.square.y = xy[1];
         }
     }
 }
@@ -301,14 +327,14 @@ function updateAllXY() {
 
 // websocket part
 function connect(url) {
+    let wsObject = new Ws(url);
     let ws = new WebSocket(url);
-    ws.retryWait = 1000;
     ws.onopen = function () {
         started = true;
         // subscribe to some channels
         ws.send(JSON.stringify({"event": "new_unit"}));
         ws.send(JSON.stringify({"event": "confirmed"}));
-        addWs(url);
+        addWs(wsObject);
     };
 
     function getTxType(str, confirmed = false) {
@@ -322,23 +348,24 @@ function connect(url) {
         }
     }
 
-    function handleMessage(wsi, data) {
+    function handleMessage(data) {
         let d = JSON.parse(data);
         switch (d.type) {
             case "new_unit":
-                for (let nodei = d.nodes.length - 1; nodei >= 0; nodei--) {
-                    updateTx(d.nodes[nodei].data.unit, getTxType(d.nodes[nodei].type, false), wsi, d.nodes[nodei], HIGHLIGHT_NO_CHANGE)
+                for (let txi = d.nodes.length - 1; txi >= 0; txi--) {
+                    updateTx(d.nodes[txi].data.unit, getTxType(d.nodes[txi].type, false), wsObject, HIGHLIGHT_NO_CHANGE, d.nodes[txi])
                 }
                 for (let edgei = d.edges.length - 1; edgei >= 0; edgei--) {
-                    if (edges[d.edges[edgei].source] === undefined) {
-                        edges[d.edges[edgei].source] = [];
+
+                    if (wsObject.edgeMap[d.edges[edgei].source] === undefined) {
+                        wsObject.edgeMap[d.edges[edgei].source] = [];
                     }
-                    edges[d.edges[edgei].source].push(d.edges[edgei].target);
+                    wsObject.edgeMap[d.edges[edgei].source].push(d.edges[edgei].target);
                 }
                 break;
             case "confirmed":
-                for (let nodei = d.nodes.length - 1; nodei >= 0; nodei--) {
-                    updateTx(d.nodes[nodei].data.unit, getTxType(d.nodes[nodei].type, true), wsi, d.nodes[nodei], HIGHLIGHT_NO_CHANGE)
+                for (let txi = d.nodes.length - 1; txi >= 0; txi--) {
+                    updateTx(d.nodes[txi].data.unit, getTxType(d.nodes[txi].type, true), wsObject, HIGHLIGHT_NO_CHANGE, d.nodes[txi])
                 }
                 break;
         }
@@ -346,55 +373,56 @@ function connect(url) {
 
     ws.onmessage = function (e) {
         // console.log('Message:', e.data);
-        handleMessage(wssmap[url], e.data);
+        handleMessage(e.data);
     };
 
     ws.onclose = function (e) {
-        if (wssmap[url] === undefined && started) {
-            // never succeed. ignore it
-            return;
-        }
-        console.log('Socket is closed. Reconnect will be attempted in seconds.', e.reason, retryWait);
-        setTimeout(function () {
-            connect(url);
-        }, retryWait);
-        ws.retryWait += 1000;
+        console.info("Socket closed: " + url)
     };
 
     ws.onerror = function (err) {
-        console.error('Socket encountered error: ', err.message, 'Closing socket');
         ws.close();
     };
 }
 
-function updateAncestorsHighlight(currentTx, highlight) {
-    let currentTxs = new Set();
-    currentTxs.add(currentTx.hash);
-
-    while (currentTxs.size !== 0) {
-        let nextTxs = new Set();
-        for (let tx of currentTxs) {
-            let ptx = txsmap[tx];
-            if (ptx === undefined) {
-                continue;
-            }
-            // txhash, txtype, wsi, tx, highlighting
-            // never update myself.
-            if (ptx.hash !== currentTx.hash) {
-                for (let wssi = ptx.wss.length - 1; wssi >= 0; wssi--) {
-                    updateTx(ptx.hash, ptx.type, ptx.wss[wssi], ptx.squares[wssi].tx, highlight);
-                }
-            }
-
-            if (edges[ptx.hash] === undefined) {
-                continue;
-            }
-            for (let target of edges[ptx.hash]) {
-                nextTxs.add(target);
-                console.log(target);
-            }
-        }
-        currentTxs = nextTxs;
-
+function updateAncestorsHighlightAllWs(currentTx, highlight){
+    for (let wsObject of wss){
+        updateAncestorsHighlight(currentTx, highlight, wsObject);
     }
 }
+
+function updateAncestorsHighlight(currentTx, highlight, wsObject) {
+    let currentTxHashes = new Set();
+    currentTxHashes.add(currentTx.hash);
+
+    while (currentTxHashes.size !== 0) {
+        let nextTxs = new Set();
+        for (let hash of currentTxHashes) {
+            let tx = wsObject.hashTxMap[hash];
+            if (tx === undefined) {
+                continue;
+            }
+
+            if (hash !== currentTx.hash) {
+                updateTx(hash, tx.type, wsObject, highlight);
+            }
+
+            if (wsObject.edgeMap[hash] === undefined) {
+                continue;
+            }
+            for (let target of wsObject.edgeMap[hash]) {
+                nextTxs.add(target);
+            }
+        }
+        currentTxHashes = nextTxs;
+    }
+}
+
+function scrollSmoothToBottom(id) {
+    $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+
+}
+
+$(window).scroll(function () {
+    autoScroll = $(window).scrollTop() + $(window).height() === $(document).height();
+});
