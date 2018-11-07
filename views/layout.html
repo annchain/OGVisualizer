@@ -8,10 +8,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1,maximun-scale=1.0,user-scalable=0" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=cyrillic">
 	<link rel="stylesheet" type="text/css" href="css/app.css">
-	{% block style %}
-	{% endblock %}
+	{% block style %} {% endblock %}
+	<script type="text/javascript">var url = "{{ url }}";</script>
 </head>
-<body>
+<body style="position:realtive" background="img/mapbg.jpg">
+	<script type="text/javascript" src="js/domain/config.js"></script>
 	<script type="text/javascript" src='js/lib/jquery-2.1.4.min.js'></script>	
 	<script type="text/javascript" src='js/lib/socket.io.js'></script>
 	<script type="text/javascript" src="js/lib/cytoscape.min.js"></script>

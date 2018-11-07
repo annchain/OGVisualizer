@@ -3,6 +3,7 @@
 .bak
 *.bak
 .debora
+.project
 .revision
 .vagrant
 *.exe
@@ -15,3 +16,4 @@ dump*
 .vscode
 *.json
 !package.json
+/node_modules/

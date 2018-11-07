@@ -2,7 +2,10 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	margin: 0;
+	width: 1920px;
+	height: 1080px;
 	padding: 0;
+	-webkit-font-smoothing: antialiased; 
 }
 
 #menu {
@@ -12,8 +15,8 @@ body {
 	right: 0;
 	z-index: 1000;
 	height: 45px;
-	background-color: #86cad9;
-	border-bottom: 1px solid #86cad9;
+	background-color:transparent;
+	border-bottom: 1px solid #02050e;
 }
 
 #menuInput {
@@ -52,27 +55,30 @@ body {
 
 #menuLeftImg {
 	float: left;
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 #menuLeftImg > img {
-	width: 32px;
+	width: 42px;
 }
 
 #menuLeftTitle {
 	float: left;
 	padding: 5px 5px 10px 10px;
-	font-size: 17px;
+	font-size: 22px;
 }
 
 #menuLeftTitle a {
-	color: #000;
+	color: #fff;
 }
 
 #menuRight {
-	padding: 7px;
+	position: absolute;
+	right: 0;
+	left: 80%;
+	/* padding: 7px;
 	padding-top: 0px;
-    padding-left: 1000px;
+    padding-left: 1500px; */
 }
 
 #menuRightImg {
@@ -112,36 +118,57 @@ menuAnnotation{
 	cursor: pointer;
 	display: none;
 }
-
+.cy-contain {
+	position: absolute;
+	left: 32%;
+	top: 120px;
+	width: 68%;
+	height: calc(100% - 45px);
+	background-color:transparent;
+}
 #cy {
 	position: absolute;
+	top: -20%;
+	left: 11%;
+	transform:rotate(90deg);
+	background-color: transparent;
+}
+/* #cy {
+	position: absolute;
 	right: 0;
-	left: 34%;
-	top: 45px;
+	left: 32%;
+	top: -242px;
 	bottom: 0;
 	z-index: 999;
-}
+	background-color: #02050e;
+	transform:rotate(90deg);
+} */
 
 #info {
 	position: absolute;
 	left: 0;
 	top: 45px;
 	bottom: 0;
-	width: 34%;
-	border-right: 1px solid #ccc;
+	width: 32%;
+	/* border-right: 1px solid #ccc; */
 	overflow: auto;
+	background-color:transparent;
 }
 
 #unitParent {
-	padding-left: 5px;
+	color: #fff ;
+	padding-left: 10px;
+	font-size: 22px;
 }
 
 #unit {
-	color: #808080;
+	padding-left: 10px;
+	color: #10a0de;
+    word-break:break-all;
 }
 
 #infoClose, #addressClose {
-	text-align: right;
+	text-align: left;
 	font-size: 18px;
 	margin: 10px;
 	display: none;
@@ -153,14 +180,53 @@ menuAnnotation{
 }
 
 #defaultInfo {
+	color: #fff;
 	text-align: center;
 	margin-top: 20px;
-	font-size: 18px;
+	font-size: 25px;
 }
 
 #listInfo {
 	display: none;
 	padding-left: 3px;
+}
+
+#From{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
+}
+
+#To{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
+}
+
+#Value{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
+}
+
+#Parents{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
+    word-break:break-all;
+}
+
+#Signature{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
+    word-break:break-all;
+}
+
+#otherInfo{
+	padding-left: 10px;
+	font-size: 22px;
+	color: #10a0de;
 }
 
 #info > #listInfo > div {
@@ -171,15 +237,16 @@ menuAnnotation{
 	font-weight: bold;
 	padding: 5px;
 	cursor: pointer;
-	color: #333333;
+	color: #fff;
+	font-size: 18px;
 }
 
 .infoTitle:hover {
-	color: #868686;
+	color: #fff;
 }
 
 .infoTitle.hideTitle {
-	color: #868686;
+	color: #fff;
 }
 
 .infoTitle > .infoTitleImg {
@@ -196,7 +263,7 @@ menuAnnotation{
 }
 
 .infoTitle.hideTitle:hover {
-	color: #333333;
+	color: #868686;
 }
 
 #addressInfo .infoTitle {
@@ -237,7 +304,7 @@ menuAnnotation{
 	font-weight: bold;
 	margin-bottom: 7px;
 	cursor: pointer;
-	color: #333333;
+	color: #868686;
 }
 
 .inputsInfo, .inputInfo, .inputsInf {
@@ -389,17 +456,18 @@ label {
 
 #annotation {
 	width: 300px;
-	height: 100px;
+    height: 50px;
 	position: absolute;
 	z-index: 999;
 	cursor: pointer;
 	background: url(/img/annotation.svg) center no-repeat;
 	background-size: 300px;
-	top: 30px;
+    top: 50px;
 	left: 78%;
 	/* border: 1px solid #5e5e5e; */
 	border-radius: 300%;
 	margin-left: 40px;
+	margin-left: 0px;
 }
 
 #goToTop {
@@ -410,9 +478,22 @@ label {
 	cursor: pointer;
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
-	top: 68px;
-	left: 34%;
+	top: 8%;
+	left: 32%;
 	border: 1px solid #5e5e5e;
+	border-radius: 100%;
+	margin-left: 40px;
+}
+
+#labelSwitcher{
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	background-size: 28px;
+	top: 835px;
+	left: 32.4%;
 	border-radius: 100%;
 	margin-left: 40px;
 }
@@ -426,7 +507,7 @@ label {
 	background: url(/img/start.svg) center no-repeat;
 	background-size: 28px;
 	top: 158px;
-	left: 34%;
+	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -441,7 +522,7 @@ label {
 	background: url(/img/pause.svg) center no-repeat;
 	background-size: 28px;
 	top: 248px;
-	left: 34%;
+	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -455,8 +536,8 @@ label {
 	cursor: pointer;
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
-	top: 750px;
-	left: 34%;
+	top: 75%;
+	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -470,8 +551,8 @@ label {
 	cursor: pointer;
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
-	top: 800px;
-	left: 34%;
+	top: 80%;
+	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -556,7 +637,7 @@ label {
 		right: 39px;
 	}
 
-	#cy.showInfoBlock, #scroll.showInfoBlock, #goToTop.showInfoBlock {
+	#cy.showInfoBlock, #scroll.showInfoBlock, #goToTop.showInfoBlock, #plus.showInfoBlock, #minus.showInfoBlock, #annotation.showInfoBlock {
 		display: none;
 	}
 

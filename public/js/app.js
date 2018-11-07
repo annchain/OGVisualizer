@@ -1,7 +1,3 @@
-var ws = new WebSocket('ws://localhost:9090/ws');
-// var socketURL = 'https://tanglemonitor.com:4434';
-// var socket = io(socketURL);
-
 var cy;
 var nodes, edges;
 var tx_list = [];
@@ -12,15 +8,46 @@ var generateOffset = 0;
 var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
-var zoomSet = 1.01;
+var oldSet;
+var zoomSet = 0.86;
 var timerInfoMessage;
+var tip_index = [];
+var new_tip_index = [];
+var old_tip_index = [];
+var pending_index = [];
+var comfirmed_index = [];
+var sequencer_index = [];
+var IF_FIRST = false;
+var focus = false;
+var x,y;
+var pxSize = 25;
+var labelSwitch = false;
+var last_uint;
+//init websocket host
+if (url.length == 0) {
+    url = config.websocket.host;
+}
+var ws = new WebSocket("ws://" + url);
+
+window.onresize = function(){
+	var width = document.body.clientWidth;
+	var height = document.body.clientHeight;
+	let a = document.querySelector("#cy");
+	let b = (width * 0.68).toFixed(2) + 'px';
+	console.log((document.body.clientHeight - 45) + 'px', b);
+	a.style.height = b;
+	a.style.width = (document.body.clientHeight - 45) + 'px';
+}
 
 var scroll = $('#scroll');
 var scrollTopPos = 0, scrollLowPos;
 $('#cy, #scroll, #goToTop').show();
 
 initSocket();
-var t1 = window.setTimeout(start,1000);
+var t1 = window.setTimeout(window.onresize,1000);
+var t2 = window.setTimeout(start,1000);
+// var t3 = window.setInterval(edges_flash,200);
+
 
 function createCy(){
      cy = cytoscape({
@@ -41,30 +68,50 @@ function createCy(){
 					'text-halign': 'center',
 					'font-size': '13px',
 					'text-margin-y': '5px',
-					'background-color': '#fff',
+					'background-color': '#00ffff',
 					'border-width': 2,
-					'border-color': '#1754c2',
-					// 'border-color': '#333',
-					// 'border-style': 'dotted',
-					'width': 10,
-					'height': 10
+					'border-color': '#00ffff',
+					'width': pxSize,
+					'height': pxSize
 				}
             },
             {
 				selector: 'edge',
 				style: {
-					'width': 2,
+					'width': 5,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#6495ed',
-					'target-arrow-color': '#6495ed',
+					'line-color': '#753faa',
+					'target-arrow-color': '#753faa',
+					'curve-style': 'bezier'
+				}
+			},{
+				selector: '.edge_flash',
+				style: {
+					'width': 1,
+					'target-arrow-shape': 'triangle',
+					'line-color': '#42408f',
+					'target-arrow-color': '#42408f',
 					'curve-style': 'bezier'
 				}
 			},{
 				selector: '.comfirmed_unit',
 				style: {
+					'shape':'rectangle',
 					'width-width': 2,
-					'border-color': '#3cb371',
-					'background-color': '#3cb371',
+					'border-color': '#75fb6b',
+					'background-color': '#75fb6b',
+					'width': pxSize+1,
+					'height': pxSize+1
+				}
+			},{
+				selector: '.comfirmed_unit_flash',
+				style: {
+					'shape':'rectangle',
+					'width-width': 1,
+					'border-color': '#e6d95f',
+					'background-color': '#e6d95f',
+					'width': pxSize+1,
+					'height': pxSize+1
 				}
 			},{
 				selector: '.pending_unit',
@@ -76,17 +123,16 @@ function createCy(){
 			},{
 				selector: '.sequencer_unit',
 				style: {
+					'shape':'rectangle',
 					'border-width': 2,
-					'background-color': '#ff69b4',
-					'border-color': '#ff69b4'
+					'background-color': '#d64f5f',
+					'border-color': '#d64f5f',
+					'width': pxSize+3,
+					'height': pxSize+3
 				}
 			},{
 				selector: '.is_on_main_chain',
 				style: {
-					//	'border-width': 4,
-					//	'border-style': 'solid',
-					//	'border-color': '#6495ed'
-					//	'border-color': '#333'
 					'background-color': '#6495ed'
 				}
 			}
@@ -109,6 +155,7 @@ function createCy(){
 	});
     
     $(cy.container()).on('wheel mousewheel', function(e) {
+		focus = true;
 		var deltaY = e.originalEvent.wheelDeltaY || -e.originalEvent.deltaY;
 		if (page == 'dag') {
 			e.preventDefault();
@@ -124,7 +171,6 @@ function createCy(){
 }
 
 function createGraph(data){
-	//console.log(data);
 	nodes = data.nodes;
 	edges = data.edges;
     var graph = new dagre.graphlib.Graph({
@@ -141,16 +187,13 @@ function createGraph(data){
 			width: 32,
 			height: 32,
 			type: node.type,
-			sequence: node.sequence
 		});
     });
-    for (var k in data.edges) {
-		if (data.edges.hasOwnProperty(k)) {
-			graph.setEdge(data.edges[k].data.source, data.edges[k].data.target);
-		}
+	if (data.edges){
+		data.edges.forEach(function(edge){
+		})
 	}
     dagre.layout(graph);
-    //console.log(graph);
     return graph;
 }
 
@@ -161,7 +204,6 @@ function generate(data) {
 	graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
-			//console.log(_node.x,_node.y);
 			if (_node.x < left) left = _node.x;
 			if (_node.x > right) right = _node.x;
 		}
@@ -170,10 +212,7 @@ function generate(data) {
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			console.log(_node);
 			classes += _node.type;
-			//if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
-			//if (_node.is_stable) classes += 'is_stable ';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = generateOffset - _node.y + 22;
@@ -187,12 +226,13 @@ function generate(data) {
 					position: {x: phantoms[unit], y: _node.y + newOffset_y},
 					classes: classes
 				});
+				console.log("phantoms",phantoms[unit],_node.y + newOffset_y);
 				delete phantoms[unit];
 			}
 			else {
 				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
-				if (pos_iomc == 0 && _node.type == "comfirmed_unit") {
-					pos_iomc += 40;
+				if (pos_iomc == 0 || _node.type == "sequencer_unit") {
+					pos_iomc += 35;
 				}
 				generateAdd.push({
 					group: "nodes",
@@ -205,7 +245,8 @@ function generate(data) {
 	});
 	generateAdd = fixConflicts(generateAdd);
 	cy.add(generateAdd);
-	generateOffset = cy.nodes()[cy.nodes().length - 1].position().y;
+	generateOffset = cy.nodes()[0].position().x;
+	console.log(cy.nodes()[cy.nodes().length - 1]._private.position.x,cy.nodes()[0].position().x)
 	nextPositionUpdates = generateOffset;
 	cy.add(createEdges());
 	updListNotStableUnit();
@@ -214,79 +255,89 @@ function generate(data) {
 
 function setNew(data, newUnits){
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
-		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {};
+		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {},target01,target02,target01_coord,target02_coord,setoff;
+	// target01 = data.edges[0].target;
+	// target02 = data.edges[1].target;
+	// target01_coord = cy.getElementById(target01)._private.position;
+	// target02_coord = cy.getElementById(target02)._private.position;
 	var graph = createGraph(data);
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
-            //console.log(_node);
 			y = _node.y;
 			if (y < min) min = y;
 			if (y > max) max = y;
 			if (_node.x < left) left = _node.x;
 			if (_node.x > right) right = _node.x;
+			if (!labelSwitch) _node.label = "";
 		}
     });
     graph.nodes().forEach(function(unit) {
 		_node = graph.node(unit);
 		if (_node) {
 			classes = '';
-			console.log(_node.type)
 			classes += _node.type;
-			//if (_node.is_on_main_chain) classes += 'is_on_main_chain ';
-			//if (_node.is_stable) classes += 'is_stable ';
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
-				newOffset_y = newOffset - (max - min) + 66;
-				newOffset -= (max - min) + 88;
+				newOffset_y = newOffset - (max - min) + 75;
+				newOffset -= (max - min) + 32;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
 				}
 			}
-			var random = randomNum(-25,30);
-			//console.log(random);
 			if (phantomsTop[unit] !== undefined) {
+				console.log('in here');
 				cy.remove(cy.getElementById(unit));
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+random, y: _node.y + newOffset_y},
+					position: {x: phantomsTop[unit]+randomNum(-15,15), y: _node.y + newOffset_y+randomNum(-15,15)},
 					classes: classes
 				});
-				//console.log(_node.y + newOffset_y)
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
-				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
-					pos_iomc += 40;
+				pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
+				while(Math.abs(pos_iomc-oldSet)<90){
+					pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
 				}
+				oldSet = pos_iomc;
+				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
+					pos_iomc += 20;
+				}
+				var XX = pos_iomc+randomNum(-15,15);
+				var YY = _node.y + newOffset_y+randomNum(-15,15);
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: pos_iomc+random, y: _node.y + newOffset_y},
+					position: {x: XX, y: _node.y + YY},
 					classes: classes
 				});
-				//console.log(_node.y,newOffset_y,_node.y + newOffset_y);
 			}
 		}
+		old_y = _node.y + newOffset_y;
     });
-    generateAdd = fixConflicts(generateAdd);
+	generateAdd = fixConflicts(generateAdd);
     cy.add(generateAdd);
 	cy.add(createEdges()); 
     updListNotStableUnit();
 	updateScrollHeigth(); 
+	flash_tx_info(data.nodes[0].data.unit);
+	last_uint = data.nodes[0].data.unit;
 }
+
 //addClass
-function updateClass(){
-	// cy.$('#j')
-  	// 	.data('weight', '70')   // style update
-  	// 	.addClass('funny')      // style update AGAIN
-  	// 	.removeClass('serious') // style update YET AGAIN s
-	var unit = '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=';
-	console.log(cy.getElementById(unit));
-	cy.getElementById(unit).removeClass('is_on_main_chain')
+function updateClass_sequencer_unit(unit){
+	cy.getElementById(unit).addClass('sequencer_unit');
+}
+
+function updateClass_comfirmed_unit(unit){
+	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
 	cy.getElementById(unit).addClass('comfirmed_unit');
+}
+
+function updateClass_pending_unit(unit){
+	cy.getElementById(unit).addClass('pending_unit');
 }
 
 function animationPanUp(distance) {
@@ -351,9 +402,6 @@ function scrollUp() {
 	) {
 		cy.panBy({x: 0, y: 25});//scrollUp
 	}
-	else if (notLastUnitUp === true) {
-		//getPrev();
-	}
 }
 
 function updListNotStableUnit() {
@@ -384,39 +432,40 @@ function createEdges() {
 		if (_edges[k]) delete _edges[k];
 	}
 	for (k in phantoms) {
-		cy.getElementById(k).position('y', generateOffset + 166);
+		cy.getElementById(k).position('y', generateOffset + 25);
 	}
 	for (k in phantomsTop) {
-		cy.getElementById(k).position('y', newOffset - 166);
+		cy.getElementById(k).position('y', newOffset - 25);
 	}
 	for (k in _edges) {
 		if (_edges.hasOwnProperty(k)) {
 			classes = '';
 			classes += _edges[k].best_parent_unit ? 'best_parent_unit' : '';
-			if (cy.getElementById(_edges[k].data.target).length) {
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+			if (cy.getElementById(_edges[k].target).length) {
+				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 			else {
-				position = cy.getElementById(_edges[k].data.source).position();
-				phantoms[_edges[k].data.target] = position.x + offset;
-				out.push({
-					group: "nodes",
-					data: {id: _edges[k].data.target, unit_s: _edges[k].data.target.substr(0, 7) + '...'},
-					position: {x: position.x + offset, y: generateOffset + 166}
-				});
-				offset += 60;
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+				// position = cy.getElementById(_edges[k].source).position();
+				// phantoms[_edges[k].target] = position.x + offset;
+				// out.push({
+				// 	group: "nodes",
+				// 	data: {id: _edges[k].target, unit_s: _edges[k].target.substr(0, 7) + '...'},
+				// 	position: {x: position.x + offset, y: generateOffset + 25},
+				// 	classes : 'sequencer_unit'//first unit classes
+				// });
+				// offset += 60;
+				// out.push({group: "edges", data: _edges[k], classes: classes});
 			}
-			if (!cy.getElementById(_edges[k].data.source).length) {
-				position = cy.getElementById(_edges[k].data.target).position();
-				phantomsTop[_edges[k].data.source] = position.x + offsetTop;
+			if (!cy.getElementById(_edges[k].source).length) {
+				position = cy.getElementById(_edges[k].target).position();
+				phantomsTop[_edges[k].source] = position.x + offsetTop;
 				out.push({
 					group: "nodes",
-					data: {id: _edges[k].data.source, unit_s: _edges[k].data.source.substr(0, 7) + '...'},
-					position: {x: position.x + offsetTop, y: newOffset - 166}
+					data: {id: _edges[k].source, unit_s: _edges[k].source.substr(0, 7) + '...'},
+					position: {x: position.x + offsetTop, y: newOffset - 25}
 				});
 				offsetTop += 60;
-				out.push({group: "edges", data: _edges[k].data, classes: classes});
+				out.push({group: "edges", data: _edges[k], classes: classes});
 			}
 		}
 	}
@@ -440,10 +489,10 @@ function fixConflicts(arr) {
 				if (arr[a].data.id == conflicts[k][b].data.id && units.indexOf(arr[a].data.id) == -1) {
 					units.push(arr[a].data.id);
 					if (arr[a].position.x < 0) {
-						offset -= 60;
+						offset -= 30;
 					}
 					else {
-						offset += 60;
+						offset += 30;
 					}
 					arr[a].position.x += offset;
 				}
@@ -454,7 +503,8 @@ function fixConflicts(arr) {
 }
 
 function searchForm(text) {
-	if (text.length == 44 || text.length == 32) {
+	console.log(text);
+	if (text.length == 66 || text.length == 32 || text.length == 2) {
 		location.hash = text;
 	}
 	else {
@@ -469,14 +519,38 @@ function convertPosPanToPosScroll(posY, topPos) {
 	return ((scroll.height() / 2) - topPos) - posY;
 }
 
+function showHideBlock(event, id) {
+	var block = $('#' + id);
+	var target;
+	if (event.target.classList.contains('infoTitle')) {
+		target = $(event.target);
+	}
+	else {
+		target = $(event.target.parentNode);
+	}
+	if (block.css('display') === 'none') {
+		block.show(250);
+		target.removeClass('hideTitle');
+	}
+	else {
+		block.hide(250);
+		target.addClass('hideTitle');
+	}
+}
+
 function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-300}
 		}, {
-			duration: 400
+			duration: 1500
 		});
+	focus = false;
+}
+
+function labelSwitcher(){
+	labelSwitch = !labelSwitch;
 }
 
 function randomNum(minNum,maxNum){ 
@@ -494,17 +568,19 @@ function randomNum(minNum,maxNum){
 }
 
 function plus(){
-	zoomSet += 0.25
+	zoomSet += 0.05
 	cy.viewport({zoom: zoomSet});
+	goToTop();
 }
 
 function minus(){
-	zoomSet -= 0.25
+	zoomSet -= 0.05
 	cy.viewport({zoom: zoomSet});
+	goToTop();
 }
 
 function adaptiveShowInfo() {
-	$('#cy, #scroll, #goToTop').addClass('showInfoBlock');
+	$('#cy, #scroll, #goToTop, #plus, #minus, #annotation').addClass('showInfoBlock');
 	$('#info').removeClass('hideInfoBlock');
 }
 
@@ -525,123 +601,116 @@ function hideInfoMessage() {
 
 function closeInfo() {
 	$('#info').addClass('hideInfoBlock');
-	$('#cy, #scroll, #goToTop').removeClass('showInfoBlock');
+	$('#cy, #scroll, #goToTop, #plus, #minus, #annotation').removeClass('showInfoBlock');
 }
 
 //event
 
 window.addEventListener('hashchange', function() {
-	if (location.hash.length == 45 || location.hash.length == 33) {
-		console.log(location.hash.substr(1));
-		adaptiveShowInfo();
-		showInfoMessage("Address not found")
-		$('#unit').html(location.hash.substr(1));
-		$('#listInfo').show();
-		//get unit info api
-		//highlightNode(location.hash.substr(1));
-		if ($('#addressInfo').css('display') == 'block') {
-			$('#addressInfo').hide();
-		}
+	adaptiveShowInfo();
+	$('#unit').html(location.hash.substr(1));
+	$('#listInfo').show();
+	focus = true;
+	get_tx_info(location.hash.substr(1));
+	if ($('#addressInfo').css('display') == 'block') {
+		$('#addressInfo').hide();
 	}
 });
 
-// 初始化 websocket
-
-// function initSocket(){
-//     socket.on('connect',function(){
-//         if(socket.connected){
-//             var websocketActive = true;
-//             console.log(`Successfully connected to Websocket.. [websocketActive: ${websocketActive}] ID:`,socket.id);
-//         }else{
-//             console.log('something worng..');
-//         }
-//     })
-// }
+function get_tx_info(uint){
+	// var url_query = "http://localhost:8000/transaction?hash="+uint;
+	var url_query = "http://10.253.169.129:8000/transaction?hash="+uint;
+	//var url_query = "http://latifrons.cf:8000/transaction?hash="+uint;
+	$.get(url_query,function(data){
+		var ParentsHash = data.ParentsHash.toString();
+		ParentsHash = ParentsHash.replace(/,/g,'<br>');
+		$('#From').html(data.From);
+		$('#To').html(data.To);
+		$('#Parents').html(ParentsHash);
+		$('#Signature').html(data.Signature);
+		$('#AccountNonce').html(data.AccountNonce);
+		$('#Height').html(data.Height);
+		$('#MineNonce').html(data.MineNonce);
+		$('#Type').html(data.Type);
+		$('#Value').html(data.Value);
+	});
+}
 
 function initSocket(){
 	ws.onopen = function(){  
 		console.log('socket open');
-	};	
+		var startMsg = "{\"event\":\"new_unit\"}";
+		ws.send(startMsg);
+		read_confirmed_Tx();
+	};
 }
 
+function reconnect (){
+	ws = new WebSocket("ws://" + url);
+	ws.onopen = function(){  
+		console.log('socket open');
+		var startMsg = "{\"event\":\"new_unit\"}";
+		ws.send(startMsg);
+		read_new_Tx();
+		read_confirmed_Tx();
+	};
+	ws.onclose = disConnect;
+	console.log(ws,'ws has reconnect');
+}
+
+var disConnect = function(){
+	console.log('now ws is disconnected.');
+    setTimeout(function(){
+         reconnect();
+    },500);
+}
+
+ws.onclose = disConnect;
+
 function start(){
-	var data = {};
-    data.nodes = [];
-    data.edges = {};
-    var data1 = {
-        unit : '/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
-        unit_s : '/3WhIDC...'
-    }
-    var a = {
-        data : data1,
-        type : "comfirmed_unit",
-        rowid : 4071777,
-        sequence : "good"
-    }
-    data.nodes.push(a);
-	var data3 = {
-        unit : 'AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=',
-        unit_s : 'AAAAIDC...'
-    }
-    var c = {
-        data : data3,
-        type : "pending_unit",
-        rowid : 4071779,
-        sequence : "good"
-	}
-	data.nodes.push(c);
-    var dataA = {
-        id :"99031584-2b04-42c8-82f3-efdc4a241ba8",
-        source : "/3WhIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
-        target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
-	}
-	var dataB = {
-        id :"88888584-2b04-42c8-82f3-efdc4a241ba8",
-        source : "AAAAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek=",
-        target : "/8AAIDCv2Ki2z+HGeknnGW2LOsXgketPUK3dtawgdek="
-	}
-    data.edges.dataA = {
-        best_parent_unit : false,
-        data : dataA,
-	}
-	data.edges.dataB = {
-        best_parent_unit : true,
-        data : dataB,
-	}
-    console.log(data);
-    createCy();
-	generate(data);
-	oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
-    cy.viewport({zoom: zoomSet});
-	cy.center(cy.nodes()[0]);
-	page = 'dag';
-	var startMsg = "{\"event\":\"new_unit\"}";
-	ws.send(startMsg);
+	createCy();
 	read_new_Tx();
-    // read_update_Tx();
-    //console.log(tx_list);
+}
+
+function edges_flash(){
+	edges && edges.forEach(function(edge){
+		// cy.getElementById(edge.id).flashClass('edge_flash',500);
+	})
 }
 
 function pause(){
     console.log('in pause');
-    socket.on('disconnect',function(reasion){
-        console.log('##############');
-        console.log(reasion);
-        console.log('##############');
-    });
 }
-
-// function read_new_Tx(){
-//     socket.on('newTX',function(newTX){
-//         tx_list.push(newTX);
-//     })
-// }
 
 function read_new_Tx(){
 	ws.onmessage = function(data){
-		console.log("websocket",JSON.parse(data.data));
-		setNew(JSON.parse(data.data),true);
+		data = JSON.parse(data.data)
+		if(data.type == "new_unit"){
+			if(!IF_FIRST){
+				generate(data);
+				IF_FIRST = true;
+				oldOffset = cy.getElementById(nodes[0].data.unit).position().y + 66;
+				cy.viewport({zoom: zoomSet});
+				cy.center(cy.nodes()[0]);
+				page = 'dag';
+			}else{
+				var newTX = data;
+				setNew(newTX,true);
+				tip_index.push(newTX);
+				rm_old_Tx(newTX.nodes.length);
+				if(!focus) goToTop();  
+			}
+		}else if(data.type == "confirmed"){
+			data.nodes.forEach(function(node){
+				updateClass_comfirmed_unit(node.data.unit);
+			})
+		}
 	}
+}
+
+function read_confirmed_Tx(){
+	var startMsg2 = "{\"event\":\"confirmed\"}";
+	ws.send(startMsg2);
 }
 
 function read_update_Tx(){
@@ -651,13 +720,11 @@ function read_update_Tx(){
 }
 
 function update_Tx(update, updateType){
-    console.log("in update");
     var txHash = update.hash;
     var milestoneType = update.milestone;
     var confirmationTime = update.ctime;
 
     var hashIndex = tx_list.findIndex(tx => tx.hash === txHash);
-    console.log(hashIndex)
     if (hashIndex !== -1 && tx_list[hashIndex] !== undefined) {
         if (updateType === 'txConfirmed' || updateType === 'Milestone') {
             tx_list[hashIndex].ctime = confirmationTime;
@@ -672,13 +739,96 @@ function update_Tx(update, updateType){
     }else{
         console.log(`${updateType === 'Milestone' ? 'Milestone' : 'TX'} not found in local DB - Hash: ${txHash} | updateType: ${updateType}`);
     }
-    consoleTx();
 }
 
-function consoleTx(){
-    for(var i=0;i<tx_list.length;i++){
-        if(tx_list[i].confirmed){
-            console.log("@@@@@@@@@@@",tx_list[i])
-        }
-    }
+function flash_tx_info(uint){
+	adaptiveShowInfo();
+	$('#unit').html(uint);
+	$('#listInfo').show();
+	get_tx_info(uint);
+	if ($('#addressInfo').css('display') == 'block') {
+		$('#addressInfo').hide();
+	}
+}
+
+function read_random_tx(){
+	var Data = {};
+	Data.nodes = new_tip_index;
+	draw_edges(Data);
+	old_tip_index = new_tip_index;
+	new_tip_index = [];
+	if(!focus){
+		goToTop();
+	}
+}
+
+function rm_old_Tx(length){
+	if(cy.nodes().length>200){
+		var current_crood = cy.getElementById(last_uint)._private.position
+		cy.nodes().forEach(function(node){
+			var node_crood = node._private.position;
+			if(node_crood.y>current_crood.y+1500){
+				cy.remove(cy.getElementById(node._private.data.id));
+			}
+		})
+	}	
+}
+
+function draw_edges(Data){
+	var data = {};
+			data.nodes = Data.nodes;
+			data.edges = [];
+	new_tip_index.forEach(function(res){
+		var source = res.data.unit;
+		for(var i=0;i<2;i++){
+			var target = old_tip_index[Math.floor(Math.random() * old_tip_index.length)].data.unit;
+			var id = gen_random_string(36);
+			var dataA = {
+				id :id,
+				source : source,
+				target : target
+			}
+			data.edges.push(dataA);
+		}
+	});
+	setNew(data,true);
+	old_tip_index.forEach(function(res){
+		var unit = res.data.unit;
+		updateClass_pending_unit(unit);
+		pending_index.push(res);
+	})
+}
+
+function gen_random_string(len){
+	len = len || 32;
+	var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+	var maxPos = chars.length;
+	var pwd = '';
+	for (i = 0; i < len; i++) {
+		pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+	}
+	return pwd;
+}
+
+function gen_tip_unit(){
+	var unit = gen_random_string(13)+'+HGeknnGW2LOsXgketPUK3dtawgdek=';
+	var unit_s = unit.slice(0,7)+'...';
+	var data = {
+        unit : unit,
+        unit_s : unit_s
+	}
+	var a = {
+		data : data,
+		type : ""
+	}
+	new_tip_index.push(a);
+	tip_index.push(a);
+}
+
+function painting(){
+	var random = randomNum(1,1)
+	for(var i=0;i<random;i++){
+		gen_tip_unit();
+	}
+	read_random_tx();
 }
