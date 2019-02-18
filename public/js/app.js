@@ -1,7 +1,7 @@
 var cy;
 var nodes, edges;
 var tx_list = [];
-var newOffset = -116;
+var newOffset = -150;
 var phantoms = {};
 var phantomsTop = {};
 var generateOffset = 0;
@@ -20,7 +20,7 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 25;
+var pxSize = 22;
 var labelSwitch = false;
 var last_uint;
 //init websocket host
@@ -78,7 +78,7 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 5,
+					'width': 4,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#753faa',
 					'target-arrow-color': '#753faa',
@@ -280,7 +280,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 32;//行间距
+				newOffset -= (max - min) + 35;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
@@ -292,21 +292,21 @@ function setNew(data, newUnits){
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
-					position: {x: phantomsTop[unit]+randomNum(-15,15), y: _node.y + newOffset_y+randomNum(-15,15)},
+					position: {x: phantomsTop[unit]+randomNum(0,20), y: _node.y + newOffset_y+randomNum(0,20)},
 					classes: classes
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-1000,500)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-800,400)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-1000,500)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
 					pos_iomc += 20;
 				}
-				var XX = pos_iomc+randomNum(-15,15);
-				var YY = _node.y + newOffset_y+randomNum(-15,15);
+				var XX = pos_iomc+randomNum(0,20);
+				var YY = _node.y + newOffset_y+randomNum(0,20);
 				generateAdd.push({
 					group: "nodes",
 					data: {id: unit, unit_s: _node.label},
@@ -618,21 +618,22 @@ window.addEventListener('hashchange', function() {
 });
 
 function get_tx_info(uint){
-	// var url_query = "http://localhost:8000/transaction?hash="+uint;
-	var url_query = "http://10.253.169.129:8000/transaction?hash="+uint;
+	var url_query = "http://localhost:8000/transaction?hash="+uint;
+	//var url_query = "http://10.253.169.129:8000/transaction?hash="+uint;
 	//var url_query = "http://latifrons.cf:8000/transaction?hash="+uint;
 	$.get(url_query,function(data){
-		var ParentsHash = data.ParentsHash.toString();
+		console.log(data)
+		var ParentsHash = data.data.ParentsHash.toString();
 		ParentsHash = ParentsHash.replace(/,/g,'<br>');
-		$('#From').html(data.From);
-		$('#To').html(data.To);
+		$('#From').html(data.data.From);
+		$('#To').html(data.data.To);
 		$('#Parents').html(ParentsHash);
-		$('#Signature').html(data.Signature);
-		$('#AccountNonce').html(data.AccountNonce);
-		$('#Height').html(data.Height);
-		$('#MineNonce').html(data.MineNonce);
-		$('#Type').html(data.Type);
-		$('#Value').html(data.Value);
+		$('#Signature').html(data.data.Signature);
+		$('#AccountNonce').html(data.data.AccountNonce);
+		$('#Height').html(data.data.Height);
+		$('#MineNonce').html(data.data.MineNonce);
+		$('#Type').html(data.data.Type);
+		$('#Value').html(data.data.Value);
 	});
 }
 

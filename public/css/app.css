@@ -6,6 +6,7 @@ body {
 	height: 1080px;
 	padding: 0;
 	-webkit-font-smoothing: antialiased; 
+	overflow: hidden;
 }
 
 #menu {
@@ -478,7 +479,7 @@ label {
 	cursor: pointer;
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
-	top: 8%;
+	top: 6%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -536,7 +537,7 @@ label {
 	cursor: pointer;
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
-	top: 75%;
+	top: 90%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -551,7 +552,7 @@ label {
 	cursor: pointer;
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
-	top: 80%;
+	top: 95%;
 	left: 32%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
@@ -604,9 +605,9 @@ label {
 	display: block;
 }
 
-.numberFormat {
-	/*cursor: pointer;*/
-}
+/* .numberFormat {
+	cursor: pointer;
+} */
 
 #tableListTransactions {
 	width: 100%;
