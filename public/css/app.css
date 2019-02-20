@@ -15,12 +15,13 @@ body {
 	top: 0;
 	right: 0;
 	z-index: 1000;
-	height: 45px;
+	height: 8%;
 	background-color:transparent;
 	border-bottom: 1px solid #02050e;
 }
 
 #menuInput {
+	display: none;
 	float: left;
 	margin-left: -24px;
 	/* background-color: #8dbbf9; */
@@ -121,17 +122,21 @@ menuAnnotation{
 }
 .cy-contain {
 	position: absolute;
-	left: 32%;
-	top: 120px;
-	width: 68%;
+	/* left: 32%; */
+	top: 45%;
+	width: 85%;
 	height: calc(100% - 45px);
 	background-color:transparent;
+	transform:rotate(90deg);
+	display: table-cell;
+    vertical-align: middle;
 }
 #cy {
+	/* width: 2000px !important; */
+	height: 200% !important;
 	position: absolute;
-	top: -20%;
-	left: 11%;
-	transform:rotate(90deg);
+	top: -60%;
+	/* left: 15%; */
 	background-color: transparent;
 }
 /* #cy {
@@ -145,16 +150,48 @@ menuAnnotation{
 	transform:rotate(90deg);
 } */
 
+#body, #info::before {
+	background: hsla(0,0%,100%,.3) / cover fixed;
+}
+
 #info {
 	position: absolute;
 	left: 0;
-	top: 45px;
+	top: 8%;
 	bottom: 0;
 	width: 32%;
-	/* border-right: 1px solid #ccc; */
 	overflow: auto;
-	background-color:transparent;
+	z-index: 1;
+	background: hsla(0,0%,100%,.3);
 }
+
+#info::before { 
+	z-index: -1;
+	content: ''; 
+	position: absolute; 
+	top: 0; right: 0; bottom: 0; left: 0; 
+	filter: blur(20px);
+}
+/* #info:after {
+	content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.1);
+	z-index: -1;
+	background-image: url(img/mapbg.jpg);
+	background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+    -webkit-filter: blur(20px);
+    -moz-filter: blur(20px);
+    -ms-filter: blur(20px);
+    -o-filter: blur(20px);
+    filter: blur(100px);
+} */
+#info::-webkit-scrollbar {display:none}
 
 #unitParent {
 	color: #fff ;
@@ -480,7 +517,7 @@ label {
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
 	top: 6%;
-	left: 32%;
+	right: 3%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -523,7 +560,8 @@ label {
 	background: url(/img/pause.svg) center no-repeat;
 	background-size: 28px;
 	top: 248px;
-	left: 32%;
+	right: 3%;
+	/* left: 32%; */
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -538,7 +576,8 @@ label {
 	background: url(/img/plus.svg) center no-repeat;
 	background-size: 28px;
 	top: 90%;
-	left: 32%;
+	right: 3%;
+	/* left: 32%; */
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
@@ -553,10 +592,27 @@ label {
 	background: url(/img/minus.svg) center no-repeat;
 	background-size: 28px;
 	top: 95%;
-	left: 32%;
+	right: 3%;
+	/* left: 32%; */
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
 	margin-left: 40px;
+}
+
+#hideInfoButton {
+	display: block;
+	position: absolute;
+	z-index: 999;
+	top: 92.5%;
+	right: 6%;
+}
+
+#showInfoButton {
+	display: none;
+	position: absolute;
+	z-index: 999;
+	top: 92.5%;
+	right: 6%;
 }
 
 #goToTop:hover {
@@ -650,6 +706,10 @@ label {
 
 	#info.hideInfoBlock {
 		display: none;
+	}
+
+	#info.showInfoBlock {
+		display: block;
 	}
 
 	#infoClose {

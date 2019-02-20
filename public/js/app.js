@@ -20,9 +20,10 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 22;
+var pxSize = 18;
 var labelSwitch = false;
 var last_uint;
+var zoonSet = 0;
 //init websocket host
 if (url.length == 0) {
     url = config.websocket.host;
@@ -68,9 +69,9 @@ function createCy(){
 					'text-halign': 'center',
 					'font-size': '13px',
 					'text-margin-y': '5px',
-					'background-color': '#00ffff',
+					'background-color': '#fd9353',
 					'border-width': 2,
-					'border-color': '#00ffff',
+					'border-color': '#fd9353',
 					'width': pxSize,
 					'height': pxSize
 				}
@@ -78,10 +79,10 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 4,
+					'width': 3,
 					'target-arrow-shape': 'triangle',
-					'line-color': '#753faa',
-					'target-arrow-color': '#753faa',
+					'line-color': '#5d6d7c',
+					'target-arrow-color': '#5d6d7c',
 					'curve-style': 'bezier'
 				}
 			},{
@@ -94,24 +95,34 @@ function createCy(){
 					'curve-style': 'bezier'
 				}
 			},{
-				selector: '.comfirmed_unit',
+				selector: '.comfirmed_unit_1',
 				style: {
-					'shape':'rectangle',
+					'shape':'roundrectangle',
 					'width-width': 2,
-					'border-color': '#75fb6b',
-					'background-color': '#75fb6b',
-					'width': pxSize+1,
-					'height': pxSize+1
+					'border-color': '#00ff00',
+					'background-color': '#00ff00',
+					'width': pxSize+5,
+					'height': pxSize+5
+				}
+			},{
+				selector: '.comfirmed_unit_2',
+				style: {
+					'shape':'roundrectangle',
+					'width-width': 2,
+					'border-color': '#24a319',
+					'background-color': '#24a319',
+					'width': pxSize+5,
+					'height': pxSize+5
 				}
 			},{
 				selector: '.comfirmed_unit_flash',
 				style: {
-					'shape':'rectangle',
+					'shape':'roundrectangle',
 					'width-width': 1,
 					'border-color': '#e6d95f',
 					'background-color': '#e6d95f',
-					'width': pxSize+1,
-					'height': pxSize+1
+					'width': pxSize+5,
+					'height': pxSize+5
 				}
 			},{
 				selector: '.pending_unit',
@@ -123,12 +134,12 @@ function createCy(){
 			},{
 				selector: '.sequencer_unit',
 				style: {
-					'shape':'rectangle',
+					'shape':'octagon',
 					'border-width': 2,
 					'background-color': '#d64f5f',
 					'border-color': '#d64f5f',
-					'width': pxSize+3,
-					'height': pxSize+3
+					'width': pxSize+24,
+					'height': pxSize+24
 				}
 			},{
 				selector: '.is_on_main_chain',
@@ -198,6 +209,8 @@ function createGraph(data){
 }
 
 function generate(data) {
+	zoonSet += 1
+	console.log(zoonSet)
 	var newOffset_x, newOffset_y, left = Infinity, right = -Infinity, first = false, generateAdd = [], _node,
 		classes = '', pos_iomc;
 	var graph = createGraph(data);
@@ -233,6 +246,8 @@ function generate(data) {
 				pos_iomc = setMaxWidthNodes(_node.x + newOffset_x);
 				if (pos_iomc == 0 || _node.type == "sequencer_unit") {
 					pos_iomc += 35;
+					zoonSet +=1;
+					console.log(zoonSet)
 				}
 				generateAdd.push({
 					group: "nodes",
@@ -254,6 +269,7 @@ function generate(data) {
 }
 
 function setNew(data, newUnits){
+	// console.log(data, newUnits)
     var newOffset_x, newOffset_y,min = Infinity, max = -Infinity, left = Infinity, right = -Infinity, first = false, x,
 		y, generateAdd = [], _node, classes = '', pos_iomc,phantomsTop = {},phantoms = {},target01,target02,target01_coord,target02_coord,setoff;
 	// target01 = data.edges[0].target;
@@ -280,7 +296,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 35;//行间距
+				newOffset -= (max - min) + 68;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
@@ -297,9 +313,9 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-1000,500)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-1000,300)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-1000,500)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-1000,300)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
@@ -328,12 +344,20 @@ function setNew(data, newUnits){
 
 //addClass
 function updateClass_sequencer_unit(unit){
+	zoonSet = zoonSet + 1;
+	console.log(zoonSet);
 	cy.getElementById(unit).addClass('sequencer_unit');
 }
 
 function updateClass_comfirmed_unit(unit){
 	cy.getElementById(unit).flashClass('comfirmed_unit_flash',500);
-	cy.getElementById(unit).addClass('comfirmed_unit');
+	if (zoonSet % 2 == 0) {
+		cy.getElementById(unit).addClass('comfirmed_unit_1');
+		console.log(zoonSet,'in comfirmed_unit_1')
+	} else {
+		cy.getElementById(unit).addClass('comfirmed_unit_2');
+		console.log(zoonSet,'in comfirmed_unit_2')
+	}
 }
 
 function updateClass_pending_unit(unit){
@@ -542,7 +566,7 @@ function goToTop() {
 	var el = cy.getElementById(nodes[0].data.unit);
 		cy.stop();
 		cy.animate({
-			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-300}
+			pan: {x: cy.pan('x'), y: cy.getCenterPan(el).y-430}
 		}, {
 			duration: 1500
 		});
@@ -582,6 +606,18 @@ function minus(){
 function adaptiveShowInfo() {
 	$('#cy, #scroll, #goToTop, #plus, #minus, #annotation').addClass('showInfoBlock');
 	$('#info').removeClass('hideInfoBlock');
+}
+
+function hideInfo() {
+	document.getElementById('info').style.display = 'none';
+	document.getElementById('hideInfoButton').style.display = 'none';
+	document.getElementById('showInfoButton').style.display = 'block';
+}
+
+function showInfo() {
+	document.getElementById('info').style.display = 'block';
+	document.getElementById('hideInfoButton').style.display = 'block';
+	document.getElementById('showInfoButton').style.display = 'none';
 }
 
 function showInfoMessage(text, timeMs) {
@@ -686,6 +722,7 @@ function pause(){
 function read_new_Tx(){
 	ws.onmessage = function(data){
 		data = JSON.parse(data.data)
+		console.log(data)
 		if(data.type == "new_unit"){
 			if(!IF_FIRST){
 				generate(data);
@@ -702,6 +739,8 @@ function read_new_Tx(){
 				if(!focus) goToTop();  
 			}
 		}else if(data.type == "confirmed"){
+			zoonSet += 1
+			console.log(zoonSet)
 			data.nodes.forEach(function(node){
 				updateClass_comfirmed_unit(node.data.unit);
 			})
