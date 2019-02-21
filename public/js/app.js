@@ -9,7 +9,7 @@ var notLastUnitUp = false;
 var queueAnimationPanUp = [], animationPlaysPanUp = false;
 var oldOffset;
 var oldSet;
-var zoomSet = 0.86;
+var zoomSet = 0.21;
 var timerInfoMessage;
 var tip_index = [];
 var new_tip_index = [];
@@ -20,7 +20,7 @@ var sequencer_index = [];
 var IF_FIRST = false;
 var focus = false;
 var x,y;
-var pxSize = 18;
+var pxSize = 54;
 var labelSwitch = false;
 var last_uint;
 var zoonSet = 0;
@@ -314,9 +314,9 @@ function setNew(data, newUnits){
 				});
 				delete phantomsTop[unit];
 			} else {
-				pos_iomc = nextPositionUpdates + randomNum(-1000,300)/1.8;
+				pos_iomc = nextPositionUpdates + randomNum(-4200,1500)/1.8;
 				while(Math.abs(pos_iomc-oldSet)<90){
-					pos_iomc = nextPositionUpdates + randomNum(-1000,300)/1.8;
+					pos_iomc = nextPositionUpdates + randomNum(-4200,1500)/1.8;
 				}
 				oldSet = pos_iomc;
 				if (pos_iomc == 0 && _node.is_on_main_chain == 0) {
