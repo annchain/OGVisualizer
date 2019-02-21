@@ -69,9 +69,9 @@ function createCy(){
 					'text-halign': 'center',
 					'font-size': '13px',
 					'text-margin-y': '5px',
-					'background-color': '#fd9353',
+					'background-color': '#e3e3e3',
 					'border-width': 2,
-					'border-color': '#fd9353',
+					'border-color': '#e3e3e3',
 					'width': pxSize,
 					'height': pxSize
 				}
@@ -79,7 +79,8 @@ function createCy(){
             {
 				selector: 'edge',
 				style: {
-					'width': 3,
+					'width': 2,
+					'arrow-scale': 5,
 					'target-arrow-shape': 'triangle',
 					'line-color': '#5d6d7c',
 					'target-arrow-color': '#5d6d7c',
@@ -97,32 +98,32 @@ function createCy(){
 			},{
 				selector: '.comfirmed_unit_1',
 				style: {
-					'shape':'roundrectangle',
+					// 'shape':'roundrectangle',
 					'width-width': 2,
-					'border-color': '#00ff00',
-					'background-color': '#00ff00',
-					'width': pxSize+5,
-					'height': pxSize+5
+					'border-color': '#22bfd7',
+					'background-color': '#22bfd7',
+					'width': pxSize,
+					'height': pxSize
 				}
 			},{
 				selector: '.comfirmed_unit_2',
 				style: {
-					'shape':'roundrectangle',
+					// 'shape':'roundrectangle',
 					'width-width': 2,
-					'border-color': '#24a319',
-					'background-color': '#24a319',
-					'width': pxSize+5,
-					'height': pxSize+5
+					'border-color': '#2b84f0',
+					'background-color': '#2b84f0',
+					'width': pxSize,
+					'height': pxSize
 				}
 			},{
 				selector: '.comfirmed_unit_flash',
 				style: {
-					'shape':'roundrectangle',
+					// 'shape':'roundrectangle',
 					'width-width': 1,
-					'border-color': '#e6d95f',
-					'background-color': '#e6d95f',
-					'width': pxSize+5,
-					'height': pxSize+5
+					'border-color': '#21d78f',
+					'background-color': '#21d78f',
+					'width': pxSize,
+					'height': pxSize
 				}
 			},{
 				selector: '.pending_unit',
@@ -134,12 +135,12 @@ function createCy(){
 			},{
 				selector: '.sequencer_unit',
 				style: {
-					'shape':'octagon',
+					// 'shape':'octagon',
 					'border-width': 2,
-					'background-color': '#d64f5f',
-					'border-color': '#d64f5f',
-					'width': pxSize+24,
-					'height': pxSize+24
+					'background-color': '#a638fb',
+					'border-color': '#a638fb',
+					'width': pxSize*3,
+					'height': pxSize*3
 				}
 			},{
 				selector: '.is_on_main_chain',
@@ -803,11 +804,11 @@ function read_random_tx(){
 }
 
 function rm_old_Tx(length){
-	if(cy.nodes().length>200){
+	if(cy.nodes().length>500){
 		var current_crood = cy.getElementById(last_uint)._private.position
 		cy.nodes().forEach(function(node){
 			var node_crood = node._private.position;
-			if(node_crood.y>current_crood.y+2000){
+			if(node_crood.y>current_crood.y+5000){
 				cy.remove(cy.getElementById(node._private.data.id));
 			}
 		})

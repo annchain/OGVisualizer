@@ -7,6 +7,7 @@ body {
 	padding: 0;
 	-webkit-font-smoothing: antialiased; 
 	overflow: hidden;
+	background-color:#2c324f; 
 }
 
 #menu {
@@ -17,7 +18,7 @@ body {
 	z-index: 1000;
 	height: 8%;
 	background-color:transparent;
-	border-bottom: 1px solid #02050e;
+	/* border-bottom: 1px solid #02050e; */
 }
 
 #menuInput {
@@ -58,6 +59,7 @@ body {
 #menuLeftImg {
 	float: left;
 	margin-left: 10px;
+	margin-top: 10px;
 }
 
 #menuLeftImg > img {
@@ -68,6 +70,7 @@ body {
 	float: left;
 	padding: 5px 5px 10px 10px;
 	font-size: 22px;
+	margin-top: 10px;
 }
 
 #menuLeftTitle a {
@@ -151,7 +154,7 @@ menuAnnotation{
 } */
 
 #body, #info::before {
-	background: hsla(0,0%,100%,.3) / cover fixed;
+	background: rgba(30, 37, 62, 0.75) / cover fixed;
 }
 
 #info {
@@ -159,10 +162,10 @@ menuAnnotation{
 	left: 0;
 	top: 8%;
 	bottom: 0;
-	width: 32%;
+	width: 33%;
 	overflow: auto;
 	z-index: 1;
-	background: hsla(0,0%,100%,.3);
+	background: rgba(30, 37, 62, 0.75);
 }
 
 #info::before { 
@@ -516,7 +519,7 @@ label {
 	cursor: pointer;
 	background: url(/img/goToTop.svg) center no-repeat;
 	background-size: 28px;
-	top: 6%;
+	top: 10%;
 	right: 3%;
 	border: 1px solid #5e5e5e;
 	border-radius: 100%;
