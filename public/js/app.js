@@ -201,10 +201,10 @@ function createGraph(data){
 			type: node.type,
 		});
     });
-	if (data.edges){
-		data.edges.forEach(function(edge){
-		})
-	}
+	// if (data.edges){
+	// 	data.edges.forEach(function(edge){
+	// 	})
+	// }
     dagre.layout(graph);
     return graph;
 }
@@ -297,7 +297,7 @@ function setNew(data, newUnits){
 			if (!first) {
 				newOffset_x = -_node.x - ((right - left) / 2);
 				newOffset_y = newOffset - (max - min) + 75;
-				newOffset -= (max - min) + 68;//行间距
+				newOffset -= (max - min) + 100;//行间距
 				first = true;
 				if (newUnits && cy.extent().y1 < oldOffset) {
 				 	animationPanUp(max + 54);
@@ -336,11 +336,11 @@ function setNew(data, newUnits){
     });
 	generateAdd = fixConflicts(generateAdd);
     cy.add(generateAdd);
-	cy.add(createEdges()); 
+		cy.add(createEdges()); 
     updListNotStableUnit();
-	updateScrollHeigth(); 
-	flash_tx_info(data.nodes[0].data.unit);
-	last_uint = data.nodes[0].data.unit;
+		updateScrollHeigth(); 
+		flash_tx_info(data.nodes[0].data.unit);
+		last_uint = data.nodes[0].data.unit;
 }
 
 //addClass
